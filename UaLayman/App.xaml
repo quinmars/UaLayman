@@ -1,0 +1,21 @@
+﻿<Application
+    x:Class="UaLayman.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls" 
+    xmlns:local="using:UaLayman">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <muxc:XamlControlsResources />
+            </ResourceDictionary.MergedDictionaries>
+            
+            <AcrylicBrush x:Key="NavigationViewDefaultPaneBackground"
+                          BackgroundSource="Backdrop" TintColor="{ThemeResource SystemChromeMediumColor}" TintOpacity=".5"/>
+            <AcrylicBrush x:Key="NavigationViewTopPaneBackground"
+                          BackgroundSource="Backdrop" TintColor="{ThemeResource SystemChromeMediumColor}" TintOpacity=".5"/>
+            <AcrylicBrush x:Key="NavigationViewExpandedPaneBackground"
+                          BackgroundSource="HostBackdrop" TintColor="{ThemeResource SystemChromeMediumColor}" TintOpacity=".7"/>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

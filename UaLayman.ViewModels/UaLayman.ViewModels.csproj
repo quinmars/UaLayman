@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="akavache.core" Version="6.10.11" />
+    <PackageReference Include="DynamicData" Version="6.14.3" />
+    <PackageReference Include="ReactiveUI" Version="11.1.23" />
+    <PackageReference Include="Workstation.UaClient" Version="2.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\UaLayman.Common\UaLayman.Common.csproj" />
+  </ItemGroup>
+
+</Project>

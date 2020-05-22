@@ -1,0 +1,129 @@
+﻿<UserControl
+    x:Class="UaLayman.Views.BrowseView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls" 
+    xmlns:cmn="using:UaLayman"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vms="using:UaLayman.ViewModels"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <UserControl.Resources>
+        <cmn:ObjectToVisibilityConverter x:Key="HideWhenNull" />
+    </UserControl.Resources>
+
+    <SplitView IsPaneOpen="True" PanePlacement="Right" DisplayMode="Inline" PaneBackground="{ThemeResource SystemControlBackgroundChromeWhiteBrush}">
+        <SplitView.Pane>
+            <ContentControl Content="{x:Bind ViewModel.DetailViewModel, Mode=OneWay}"
+                            HorizontalContentAlignment="Stretch">
+                <ContentControl.ContentTemplateSelector>
+                    <cmn:NodeViewSelector>
+                        <cmn:NodeViewSelector.BaseTemplate>
+                            <DataTemplate x:DataType="vms:BaseNodeViewModel">
+                                <StackPanel Spacing="12" Margin="12">
+                                    <StackPanel>
+                                        <TextBlock Text="Node ID" Style="{StaticResource CaptionTextBlockStyle}"/>
+                                        <TextBlock Text="{x:Bind NodeId}" />
+                                    </StackPanel>
+
+                                    <StackPanel>
+                                        <TextBlock Text="Browse name" Style="{StaticResource CaptionTextBlockStyle}"/>
+                                        <TextBlock Text="{x:Bind BrowseName}" />
+                                    </StackPanel>
+                                    
+                                    <TextBlock Visibility="{x:Bind Description, Converter={StaticResource HideWhenNull}}" 
+                                               Text="{Binding Description}" TextWrapping="WrapWholeWords"/>
+
+                                    <StackPanel Visibility="{x:Bind WriteMask, Converter={StaticResource HideWhenNull}}">
+                                        <TextBlock Text="Write mask" Style="{StaticResource CaptionTextBlockStyle}"/>
+                                        <TextBlock Text="{x:Bind WriteMask}" />
+                                    </StackPanel>
+
+                                    <StackPanel Visibility="{x:Bind UserWriteMask, Converter={StaticResource HideWhenNull}}">
+                                        <TextBlock Text="User write mask" Style="{StaticResource CaptionTextBlockStyle}"/>
+                                        <TextBlock Text="{Binding UserWriteMask}" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </DataTemplate>
+                        </cmn:NodeViewSelector.BaseTemplate>
+                        <cmn:NodeViewSelector.VariableTemplate>
+                            <DataTemplate x:DataType="vms:VariableNodeViewModel">
+                                <StackPanel Spacing="12" Margin="12" HorizontalAlignment="Stretch">
+                                    <TextBlock Text="{x:Bind Value, Mode=OneWay}"
+                                               Style="{StaticResource HeaderTextBlockStyle}"
+                                               HorizontalAlignment="Right"/>
+                                    <StackPanel>
+                                        <TextBlock Text="DataType" Style="{StaticResource CaptionTextBlockStyle}"/>
+                                        <TextBlock Text="{x:Bind DataType}" />
+                                    </StackPanel>
+                                    <StackPanel>
+                                        <TextBlock Text="Node ID" Style="{StaticResource CaptionTextBlockStyle}"/>
+                                        <TextBlock Text="{x:Bind NodeId}" />
+                                    </StackPanel>
+
+                                    <StackPanel>
+                                        <TextBlock Text="Browse name" Style="{StaticResource CaptionTextBlockStyle}"/>
+                                        <TextBlock Text="{x:Bind BrowseName}" />
+                                    </StackPanel>
+                                    
+                                    <TextBlock Visibility="{x:Bind Description, Converter={StaticResource HideWhenNull}}" 
+                                               Text="{Binding Description}" TextWrapping="WrapWholeWords"/>
+
+                                    <StackPanel Visibility="{x:Bind WriteMask, Converter={StaticResource HideWhenNull}}">
+                                        <TextBlock Text="Write mask" Style="{StaticResource CaptionTextBlockStyle}"/>
+                                        <TextBlock Text="{x:Bind WriteMask}" />
+                                    </StackPanel>
+
+                                    <StackPanel Visibility="{x:Bind UserWriteMask, Converter={StaticResource HideWhenNull}}">
+                                        <TextBlock Text="User write mask" Style="{StaticResource CaptionTextBlockStyle}"/>
+                                        <TextBlock Text="{x:Bind UserWriteMask}" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </DataTemplate>
+                        </cmn:NodeViewSelector.VariableTemplate>
+                    </cmn:NodeViewSelector>
+                </ContentControl.ContentTemplateSelector>
+            </ContentControl>
+        </SplitView.Pane>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <ProgressBar Visibility="{x:Bind ViewModel.IsBrowsing}"  IsIndeterminate="True" />
+            <muxc:TreeView ItemsSource="{x:Bind ViewModel.Nodes}"
+                           Grid.Row="1"
+                           CanDrag="False"
+                           CanDragItems="False"
+                           CanReorderItems="False">
+                <muxc:TreeView.ItemTemplate>
+                    <DataTemplate x:DataType="vms:BrowseItemViewModel">
+                        <muxc:TreeViewItem ItemsSource="{x:Bind Children}"
+                                           MinHeight="26"
+                                           CanDrag="False"
+                                           HorizontalContentAlignment="Stretch"
+                                           IsExpanded="{x:Bind IsExpanded,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                           IsSelected="{x:Bind IsSelected,Mode=TwoWay}">
+                            <Grid>
+                                <TextBlock Text="{x:Bind DisplayText}" />
+                                <!--
+                                <AppBarButton Icon="Add" HorizontalAlignment="Right" IsCompact="True" />
+                                -->
+                            </Grid>
+                        </muxc:TreeViewItem>
+                    </DataTemplate>
+                </muxc:TreeView.ItemTemplate>
+            </muxc:TreeView>
+            <TextBlock Grid.Row="2"
+                       Margin="10"
+                       Text="{x:Bind ViewModel.ExecutionError, Mode=OneWay}"
+                       TextWrapping="WrapWholeWords"
+                       Foreground="Red"
+                       HorizontalAlignment="Left"
+                       />
+        </Grid>
+            
+    </SplitView>
+</UserControl>

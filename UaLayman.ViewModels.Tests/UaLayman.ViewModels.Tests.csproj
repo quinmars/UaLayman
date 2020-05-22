@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <ApplicationIcon />
+    <OutputType>Library</OutputType>
+    <StartupObject />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DynamicData" Version="6.14.3" />
+    <PackageReference Include="FluentAssertions" Version="5.10.0" />
+    <PackageReference Include="NSubstitute" Version="4.2.1" />
+    <PackageReference Include="ReactiveUI" Version="11.1.23" />
+    <PackageReference Include="ReactiveUI.Testing" Version="11.1.23" />
+    <PackageReference Include="Workstation.UaClient" Version="2.5.0" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\UaLayman.Common\UaLayman.Common.csproj" />
+    <ProjectReference Include="..\UaLayman.ViewModels\UaLayman.ViewModels.csproj" />
+  </ItemGroup>
+
+</Project>
