@@ -17,33 +17,41 @@
         <SplitView.Pane>
             <ContentControl Content="{x:Bind ViewModel.DetailViewModel, Mode=OneWay}"
                             HorizontalContentAlignment="Stretch">
+                <ContentControl.Resources>
+                    <Style TargetType="TextBlock"
+                           BasedOn="{StaticResource CaptionTextBlockStyle}"
+                           x:Key="CaptionStyle">
+                        <Setter Property="Foreground" Value="{ThemeResource ApplicationSecondaryForegroundThemeBrush}" />
+                    </Style>
+                </ContentControl.Resources>
                 <ContentControl.ContentTemplateSelector>
                     <cmn:NodeViewSelector>
                         <cmn:NodeViewSelector.BaseTemplate>
                             <DataTemplate x:DataType="vms:BaseNodeViewModel">
                                 <StackPanel Spacing="12" Margin="12">
                                     <StackPanel>
-                                        <TextBlock Text="Node ID" Style="{StaticResource CaptionTextBlockStyle}"/>
+                                        <TextBlock Text="Node ID" Style="{StaticResource CaptionStyle}"/>
                                         <TextBlock Text="{x:Bind NodeId}" />
                                     </StackPanel>
 
                                     <StackPanel>
-                                        <TextBlock Text="Browse name" Style="{StaticResource CaptionTextBlockStyle}"/>
+                                        <TextBlock Text="Browse name" Style="{StaticResource CaptionStyle}"/>
                                         <TextBlock Text="{x:Bind BrowseName}" />
                                     </StackPanel>
+
+                                    <StackPanel Visibility="{x:Bind WriteMask, Converter={StaticResource HideWhenNull}, Mode=OneWay}">
+                                        <TextBlock Text="Write mask" Style="{StaticResource CaptionStyle}"/>
+                                        <TextBlock Text="{x:Bind WriteMask, Mode=OneWay}" />
+                                    </StackPanel>
+
+                                    <StackPanel Visibility="{x:Bind UserWriteMask, Converter={StaticResource HideWhenNull}, Mode=OneWay}">
+                                        <TextBlock Text="User write mask" Style="{StaticResource CaptionStyle}"/>
+                                        <TextBlock Text="{Binding UserWriteMask, Mode=OneWay}" />
+                                    </StackPanel>
                                     
-                                    <TextBlock Visibility="{x:Bind Description, Converter={StaticResource HideWhenNull}}" 
-                                               Text="{Binding Description}" TextWrapping="WrapWholeWords"/>
-
-                                    <StackPanel Visibility="{x:Bind WriteMask, Converter={StaticResource HideWhenNull}}">
-                                        <TextBlock Text="Write mask" Style="{StaticResource CaptionTextBlockStyle}"/>
-                                        <TextBlock Text="{x:Bind WriteMask}" />
-                                    </StackPanel>
-
-                                    <StackPanel Visibility="{x:Bind UserWriteMask, Converter={StaticResource HideWhenNull}}">
-                                        <TextBlock Text="User write mask" Style="{StaticResource CaptionTextBlockStyle}"/>
-                                        <TextBlock Text="{Binding UserWriteMask}" />
-                                    </StackPanel>
+                                    <TextBlock Visibility="{x:Bind Description, Converter={StaticResource HideWhenNull}, Mode=OneWay}" 
+                                               Text="{x:Bind Description, Mode=OneWay}" TextWrapping="WrapWholeWords"
+                                               FontStyle="Italic" />
                                 </StackPanel>
                             </DataTemplate>
                         </cmn:NodeViewSelector.BaseTemplate>
@@ -52,33 +60,36 @@
                                 <StackPanel Spacing="12" Margin="12" HorizontalAlignment="Stretch">
                                     <TextBlock Text="{x:Bind Value, Mode=OneWay}"
                                                Style="{StaticResource HeaderTextBlockStyle}"
+                                               Foreground="{ThemeResource SystemAccentColor}"
                                                HorizontalAlignment="Right"/>
                                     <StackPanel>
-                                        <TextBlock Text="DataType" Style="{StaticResource CaptionTextBlockStyle}"/>
-                                        <TextBlock Text="{x:Bind DataType}" />
+                                        <TextBlock Text="DataType" Style="{StaticResource CaptionStyle}"/>
+                                        <TextBlock Text="{x:Bind DataType, Mode=OneWay}" />
                                     </StackPanel>
                                     <StackPanel>
-                                        <TextBlock Text="Node ID" Style="{StaticResource CaptionTextBlockStyle}"/>
-                                        <TextBlock Text="{x:Bind NodeId}" />
+                                        <TextBlock Text="Node ID" Style="{StaticResource CaptionStyle}" />
+                                        <TextBlock Text="{x:Bind NodeId}"
+                                                   TextWrapping="Wrap"/>
                                     </StackPanel>
 
                                     <StackPanel>
-                                        <TextBlock Text="Browse name" Style="{StaticResource CaptionTextBlockStyle}"/>
+                                        <TextBlock Text="Browse name" Style="{StaticResource CaptionStyle}" />
                                         <TextBlock Text="{x:Bind BrowseName}" />
                                     </StackPanel>
+
+                                    <StackPanel Visibility="{x:Bind WriteMask, Converter={StaticResource HideWhenNull}, Mode=OneWay}">
+                                        <TextBlock Text="Write mask" Style="{StaticResource CaptionStyle}"/>
+                                        <TextBlock Text="{x:Bind WriteMask, Mode=OneWay}" />
+                                    </StackPanel>
+
+                                    <StackPanel Visibility="{x:Bind UserWriteMask, Converter={StaticResource HideWhenNull}, Mode=OneWay}">
+                                        <TextBlock Text="User write mask" Style="{StaticResource CaptionStyle}"/>
+                                        <TextBlock Text="{x:Bind UserWriteMask, Mode=OneWay}" />
+                                    </StackPanel>
                                     
-                                    <TextBlock Visibility="{x:Bind Description, Converter={StaticResource HideWhenNull}}" 
-                                               Text="{Binding Description}" TextWrapping="WrapWholeWords"/>
-
-                                    <StackPanel Visibility="{x:Bind WriteMask, Converter={StaticResource HideWhenNull}}">
-                                        <TextBlock Text="Write mask" Style="{StaticResource CaptionTextBlockStyle}"/>
-                                        <TextBlock Text="{x:Bind WriteMask}" />
-                                    </StackPanel>
-
-                                    <StackPanel Visibility="{x:Bind UserWriteMask, Converter={StaticResource HideWhenNull}}">
-                                        <TextBlock Text="User write mask" Style="{StaticResource CaptionTextBlockStyle}"/>
-                                        <TextBlock Text="{x:Bind UserWriteMask}" />
-                                    </StackPanel>
+                                    <TextBlock Visibility="{x:Bind Description, Converter={StaticResource HideWhenNull}, Mode=OneWay}" 
+                                               Text="{x:Bind Description, Mode=OneWay}" TextWrapping="WrapWholeWords"
+                                               FontStyle="Italic" />
                                 </StackPanel>
                             </DataTemplate>
                         </cmn:NodeViewSelector.VariableTemplate>

@@ -68,7 +68,8 @@ namespace UaLayman.ViewModels
                     switch (att)
                     {
                         case AttributeIds.Description:
-                            Description = val as string;
+                            var s = val as LocalizedText;
+                            Description = string.IsNullOrWhiteSpace(s?.Text) ? null : s;
                             break;
                         case AttributeIds.WriteMask:
                             WriteMask = val as uint?;

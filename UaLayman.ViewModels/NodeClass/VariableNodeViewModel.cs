@@ -154,12 +154,12 @@ namespace UaLayman.ViewModels
                 case VariantType.Float:
                     {
                         var v = (float)variant;
-                        return v.ToString();
+                        return v.ToString("G5");
                     }
                 case VariantType.Double:
                     {
                         var v = (double)variant;
-                        return v.ToString();
+                        return v.ToString("G5");
                     }
                 case VariantType.String:
                     return (string)variant.Value;
