@@ -44,5 +44,11 @@ namespace UaLayman.Views
         {
             this.InitializeComponent();
         }
+
+        private void AutoSuggestBox_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            ViewModel.ConnectionString = args.QueryText;
+            ViewModel.StartDiscover();
+        }
     }
 }
