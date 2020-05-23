@@ -60,6 +60,7 @@
                                 <StackPanel Spacing="12" Margin="12" HorizontalAlignment="Stretch">
                                     <TextBlock Text="{x:Bind Value, Mode=OneWay}"
                                                Style="{StaticResource HeaderTextBlockStyle}"
+                                               MinHeight="64"
                                                Foreground="{ThemeResource SystemAccentColor}"
                                                HorizontalAlignment="Right"/>
                                     <StackPanel>
