@@ -23,9 +23,6 @@ namespace UaLayman.ViewModels
         private readonly ReadOnlyObservableCollection<BrowseItemViewModel> _nodes;
         public ReadOnlyObservableCollection<BrowseItemViewModel> Nodes => _nodes;
 
-        private ObservableAsPropertyHelper<CommunicationState> _state;
-        public CommunicationState State => _state.Value;
-        
         private ObservableAsPropertyHelper<bool> _isBrowsing;
         public bool IsBrowsing => _isBrowsing.Value;
         
@@ -74,10 +71,6 @@ namespace UaLayman.ViewModels
                             .Catch(Observable.Return(Unit.Default)))
                 .Switch()
                 .Subscribe();
-
-            _channelService
-                .State
-                .ToProperty(this, x => x.State, out _state);
 
             this.WhenAnyValue(x => x.SelectedItem)
                 .Select(item => NodeViewModel.Create(item, _channelService))
