@@ -25,6 +25,8 @@ namespace UaLayman.Views
 {
     public sealed partial class MainView : Page, IViewFor<MainViewModel>
     {
+        public ConnectionStateViewModel StateViewModel { get; }
+
         public MainView()
         {
             this.InitializeComponent();
@@ -33,6 +35,7 @@ namespace UaLayman.Views
             var discoveryService = Locator.Current.GetService<IDiscoveryService>();
 
             ViewModel = new MainViewModel(discoveryService, channelService);
+            StateViewModel = new ConnectionStateViewModel(channelService);
 
             //CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
             Window.Current.SetTitleBar(AppTitleBar);

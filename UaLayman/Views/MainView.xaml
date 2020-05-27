@@ -5,9 +5,14 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:rxui="using:ReactiveUI"
-    xmlns:muxc="using:Microsoft.UI.Xaml.Controls" 
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    xmlns:converters="using:UaLayman.Converters"
     mc:Ignorable="d">
     <Page.Resources>
+        <converters:StateToBrushConverter x:Key="StateToColor"
+                                          DefaultBrush="Black"
+                                          FaultBrush="#FFcc3340"
+                                          ConnectionBrush="#FF038153" />
     </Page.Resources>
 
     <Grid>
@@ -34,7 +39,11 @@
                         DisplayModeChanged="Navigation_DisplayModeChanged"
                         >
             <muxc:NavigationView.MenuItems>
-                <muxc:NavigationViewItem Icon="Link" Content="Connection" Tag="Connection" />
+                <muxc:NavigationViewItem Content="Connection" Tag="Connection">
+                    <muxc:NavigationViewItem.Icon>
+                        <SymbolIcon Symbol="Link" Foreground="{x:Bind StateViewModel.State, Converter={StaticResource StateToColor}, Mode=OneWay}"/>
+                    </muxc:NavigationViewItem.Icon>
+                </muxc:NavigationViewItem>
                 <muxc:NavigationViewItem Icon="Library" Content="Browse" Tag="Browse" />
                 <muxc:NavigationViewItem Icon="List" Content="Watchlist" Tag="Watchlist" />
             </muxc:NavigationView.MenuItems>
