@@ -28,24 +28,23 @@
                        Style="{StaticResource CaptionTextBlockStyle}" />
         </Border>
         <muxc:NavigationView x:Name="Navigation"
-                        Canvas.ZIndex="0"
-                        SelectionChanged="Navigation_SelectionChanged"
-                        Header="{Binding ElementName=Navigation, Path=SelectedItem.Content}"
-                        AlwaysShowHeader="True"
-                        IsTabStop="False"
-                        BackRequested="Navigation_BackRequested"
-                        PaneOpening="Navigation_PaneOpened"
-                        PaneClosing="Navigation_PaneClosing"
-                        DisplayModeChanged="Navigation_DisplayModeChanged"
-                        >
+                             Canvas.ZIndex="0"
+                             Header="{Binding ElementName=Navigation, Path=SelectedItem.Content}"
+                             AlwaysShowHeader="True"
+                             IsTabStop="False"
+                             BackRequested="Navigation_BackRequested"
+                             PaneOpening="Navigation_PaneOpened"
+                             PaneClosing="Navigation_PaneClosing"
+                             DisplayModeChanged="Navigation_DisplayModeChanged"
+                             ItemInvoked="Navigation_ItemInvoked">
             <muxc:NavigationView.MenuItems>
-                <muxc:NavigationViewItem Content="Connection" Tag="Connection">
+                <muxc:NavigationViewItem Content="Connection" Tag="Connection" IsSelected="{x:Bind ViewModel.IsOnConnectionView}">
                     <muxc:NavigationViewItem.Icon>
                         <SymbolIcon Symbol="Link" Foreground="{x:Bind StateViewModel.State, Converter={StaticResource StateToColor}, Mode=OneWay}"/>
                     </muxc:NavigationViewItem.Icon>
                 </muxc:NavigationViewItem>
-                <muxc:NavigationViewItem Icon="Library" Content="Browse" Tag="Browse" />
-                <muxc:NavigationViewItem Icon="List" Content="Watchlist" Tag="Watchlist" />
+                <muxc:NavigationViewItem Icon="Library" Content="Browse" Tag="Browse" IsSelected="{x:Bind ViewModel.IsOnBrowseView, Mode=OneWay}"/>
+                <muxc:NavigationViewItem Icon="List" Content="Watchlist" Tag="Watchlist"  IsSelected="{x:Bind ViewModel.IsOnWatchlistView, Mode=OneWay}"/>
             </muxc:NavigationView.MenuItems>
             <rxui:RoutedViewHost Router="{x:Bind ViewModel.Router, Mode=OneWay}" />
         </muxc:NavigationView>

@@ -112,7 +112,7 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <ProgressBar Visibility="{x:Bind ViewModel.IsBrowsing}"  IsIndeterminate="True" />
+            <ProgressBar Visibility="{x:Bind ViewModel.IsBrowsing, Mode=OneWay}"  IsIndeterminate="True" />
             <muxc:TreeView ItemsSource="{x:Bind ViewModel.Nodes}"
                            Grid.Row="1"
                            CanDrag="False"

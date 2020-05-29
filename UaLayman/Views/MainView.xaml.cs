@@ -37,6 +37,8 @@ namespace UaLayman.Views
             ViewModel = new MainViewModel(discoveryService, channelService);
             StateViewModel = new ConnectionStateViewModel(channelService);
 
+            ViewModel.NavigateTo.Execute("Connection").Subscribe();
+
             //CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
             Window.Current.SetTitleBar(AppTitleBar);
             CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
@@ -66,11 +68,12 @@ namespace UaLayman.Views
             set => ViewModel = (MainViewModel)value;
         }
 
-        private void Navigation_SelectionChanged(Muxc.NavigationView sender, Muxc.NavigationViewSelectionChangedEventArgs args)
-        {
-            var item = args.SelectedItem as Muxc.NavigationViewItem;
 
-            if (!(item?.Tag is string tag))
+        private void Navigation_ItemInvoked(Muxc.NavigationView sender, Muxc.NavigationViewItemInvokedEventArgs args)
+        {
+            var tag = args.InvokedItem as string;
+
+            if (tag == null)
                 return;
 
             ViewModel.NavigateTo.Execute(tag).Subscribe();

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,6 +21,15 @@ namespace UaLayman.ViewModels
 
         // The command that navigates a user back.
         public ReactiveCommand<Unit, Unit> GoBack => Router.NavigateBack;
+
+        private readonly ObservableAsPropertyHelper<bool> _isOnConnectionView;
+        public bool IsOnConnectionView => _isOnConnectionView.Value;
+
+        private readonly ObservableAsPropertyHelper<bool> _isOnBrowseView;
+        public bool IsOnBrowseView => _isOnBrowseView.Value;
+
+        private readonly ObservableAsPropertyHelper<bool> _isOnWatchlistView;
+        public bool IsOnWatchlistView => _isOnWatchlistView.Value;
 
         public MainViewModel(IDiscoveryService discoveryService, IChannelService channelService)
         {
@@ -38,6 +48,18 @@ namespace UaLayman.ViewModels
                     return Router.Navigate.Execute(vm);
                 }
             );
+
+            Router.CurrentViewModel
+                .Select(x => x is ConnectionViewModel)
+                .ToProperty(this, x => x.IsOnConnectionView, out _isOnConnectionView, false);
+
+            Router.CurrentViewModel
+                .Select(x => x is BrowseViewModel)
+                .ToProperty(this, x => x.IsOnBrowseView, out _isOnBrowseView, false);
+
+            Router.CurrentViewModel
+                .Select(x => x is WatchlistViewModel)
+                .ToProperty(this, x => x.IsOnWatchlistView, out _isOnWatchlistView, false);
         }
     }
 }

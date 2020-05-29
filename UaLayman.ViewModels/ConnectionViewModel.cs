@@ -188,6 +188,13 @@ namespace UaLayman.ViewModels
             Observable.CombineLatest(Connect.IsExecuting, Disconnect.IsExecuting, (c, d) => c || d)
                 .ToProperty(this, x => x.IsConnectingOrDisconnecting, out _IsConnectingOrDisconnecting, false);
 
+
+            _channelService.State
+                .Where(s => s == CommunicationState.Opened)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Select(_ => NavigateTo.Execute("Browse"))
+                .Switch()
+                .Subscribe();
             /*
              * Akavache
              */
