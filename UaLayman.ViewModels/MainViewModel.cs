@@ -22,6 +22,9 @@ namespace UaLayman.ViewModels
         // The command that navigates a user back.
         public ReactiveCommand<Unit, Unit> GoBack => Router.NavigateBack;
 
+        private readonly ObservableAsPropertyHelper<bool> _CanGoBack;
+        public bool CanGoBack => _CanGoBack.Value;
+
         private readonly ObservableAsPropertyHelper<bool> _isOnConnectionView;
         public bool IsOnConnectionView => _isOnConnectionView.Value;
 
@@ -60,6 +63,9 @@ namespace UaLayman.ViewModels
             Router.CurrentViewModel
                 .Select(x => x is WatchlistViewModel)
                 .ToProperty(this, x => x.IsOnWatchlistView, out _isOnWatchlistView, false);
+
+            GoBack.CanExecute
+                .ToProperty(this, x => x.CanGoBack, out _CanGoBack, false);
         }
     }
 }

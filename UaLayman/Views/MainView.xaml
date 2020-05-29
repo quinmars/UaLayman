@@ -33,6 +33,7 @@
                              AlwaysShowHeader="True"
                              IsTabStop="False"
                              BackRequested="Navigation_BackRequested"
+                             IsBackEnabled="{x:Bind ViewModel.CanGoBack, Mode=OneWay}"
                              PaneOpening="Navigation_PaneOpened"
                              PaneClosing="Navigation_PaneClosing"
                              DisplayModeChanged="Navigation_DisplayModeChanged"
