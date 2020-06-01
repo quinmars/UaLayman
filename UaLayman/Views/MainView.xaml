@@ -13,6 +13,13 @@
                                           DefaultBrush="Black"
                                           FaultBrush="#FFcc3340"
                                           ConnectionBrush="#FF038153" />
+        
+        <DataTemplate x:Key="HeaderTemplate">
+            <Border Margin="8,24,0,0">
+                <TextBlock Style="{ThemeResource SubheaderTextBlockStyle}"
+                           Text="{Binding}"/>
+            </Border>
+        </DataTemplate>
     </Page.Resources>
 
     <Grid>
@@ -27,11 +34,13 @@
                        VerticalAlignment="Center"
                        Style="{StaticResource CaptionTextBlockStyle}" />
         </Border>
-        <muxc:NavigationView x:Name="Navigation"
+        <muxc:NavigationView x:Name="NavigationViewControl"
                              Canvas.ZIndex="0"
-                             Header="{Binding ElementName=Navigation, Path=SelectedItem.Content}"
+                             Header="{Binding ElementName=NavigationViewControl, Path=SelectedItem.Content}"
+                             HeaderTemplate="{StaticResource HeaderTemplate}"
                              AlwaysShowHeader="True"
                              IsTabStop="False"
+                             IsTitleBarAutoPaddingEnabled="False"
                              BackRequested="Navigation_BackRequested"
                              IsBackEnabled="{x:Bind ViewModel.CanGoBack, Mode=OneWay}"
                              PaneOpening="Navigation_PaneOpened"

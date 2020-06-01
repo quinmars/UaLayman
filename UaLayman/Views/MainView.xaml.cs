@@ -9,6 +9,7 @@ using UaLayman.ViewModels;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Foundation.Metadata;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.ViewManagement;
@@ -37,20 +38,17 @@ namespace UaLayman.Views
             ViewModel = new MainViewModel(discoveryService, channelService);
             StateViewModel = new ConnectionStateViewModel(channelService);
 
-            ViewModel.NavigateTo.Execute("Connection").Subscribe();
-
-            //CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
             Window.Current.SetTitleBar(AppTitleBar);
-            CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
+            //CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
             CoreApplication.GetCurrentView().TitleBar.LayoutMetricsChanged += (s, e) => UpdateAppTitle(s);
 
             // remove the solid-colored backgrounds behind the caption controls and system back button
             // This is done when the app is loaded since before that the actual theme that is used is not "determined" yet
-            Loaded += delegate (object sender, RoutedEventArgs e) {
-                ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
-                titleBar.ButtonBackgroundColor = Colors.Transparent;
-                titleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
-            };
+            Loaded += (sender, e) => UpdateTitleBar(true);
+
+            NavigationViewControl.RegisterPropertyChangedCallback(Muxc.NavigationView.PaneDisplayModeProperty, new DependencyPropertyChangedCallback(OnPaneDisplayModeChanged));
+            
+            ViewModel.NavigateTo.Execute("Connection").Subscribe();
         }
 
         public static readonly DependencyProperty ViewModelProperty = DependencyProperty
@@ -68,6 +66,11 @@ namespace UaLayman.Views
             set => ViewModel = (MainViewModel)value;
         }
 
+        private void OnPaneDisplayModeChanged(DependencyObject sender, DependencyProperty dp)
+        {
+            var navigationView = sender as Muxc.NavigationView;
+            //AppTitleBar.Visibility = navigationView.PaneDisplayMode == Muxc.NavigationViewPaneDisplayMode.Top ? Visibility.Collapsed : Visibility.Visible;
+        }
 
         private void Navigation_ItemInvoked(Muxc.NavigationView sender, Muxc.NavigationViewItemInvokedEventArgs args)
         {
@@ -79,11 +82,32 @@ namespace UaLayman.Views
             ViewModel.NavigateTo.Execute(tag).Subscribe();
         }
 
-        void UpdateAppTitle(CoreApplicationViewTitleBar coreTitleBar)
+        private void UpdateAppTitle(CoreApplicationViewTitleBar coreTitleBar)
         {
             //ensure the custom title bar does not overlap window caption controls
             Thickness currMargin = AppTitleBar.Margin;
             AppTitleBar.Margin = new Thickness(currMargin.Left, currMargin.Top, coreTitleBar.SystemOverlayRightInset, currMargin.Bottom);
+        }
+
+        private void UpdateTitleBar(bool isLeftMode)
+        {
+            CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = isLeftMode;
+
+            ApplicationViewTitleBar titleBar = ApplicationView.GetForCurrentView().TitleBar;
+
+            if (isLeftMode)
+            {
+                NavigationViewControl.PaneDisplayMode = Muxc.NavigationViewPaneDisplayMode.Auto;
+                titleBar.ButtonBackgroundColor = Colors.Transparent;
+                titleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
+            }
+            else
+            {
+                NavigationViewControl.PaneDisplayMode = Muxc.NavigationViewPaneDisplayMode.Top;
+                var userSettings = new UISettings();
+                titleBar.ButtonBackgroundColor = userSettings.GetColorValue(UIColorType.Accent);
+                titleBar.ButtonInactiveBackgroundColor = userSettings.GetColorValue(UIColorType.Accent);
+            }
         }
 
         private void Navigation_PaneClosing(Muxc.NavigationView sender, Muxc.NavigationViewPaneClosingEventArgs args)
@@ -112,16 +136,33 @@ namespace UaLayman.Views
         {
             const int smallLeftIndent = 4, largeLeftIndent = 24;
 
-            Thickness currMargin = AppTitle.Margin;
-
-            if ((sender.DisplayMode == Muxc.NavigationViewDisplayMode.Expanded && sender.IsPaneOpen) ||
-                     sender.DisplayMode == Muxc.NavigationViewDisplayMode.Minimal)
+            if (ApiInformation.IsApiContractPresent("Windows.Foundation.UniversalApiContract", 7))
             {
-                AppTitle.Margin = new Thickness(smallLeftIndent, currMargin.Top, currMargin.Right, currMargin.Bottom);
+                AppTitle.TranslationTransition = new Vector3Transition();
+
+                if ((sender.DisplayMode == Muxc.NavigationViewDisplayMode.Expanded && sender.IsPaneOpen) ||
+                         sender.DisplayMode == Muxc.NavigationViewDisplayMode.Minimal)
+                {
+                    AppTitle.Translation = new System.Numerics.Vector3(smallLeftIndent, 0, 0);
+                }
+                else
+                {
+                    AppTitle.Translation = new System.Numerics.Vector3(largeLeftIndent, 0, 0);
+                }
             }
             else
             {
-                AppTitle.Margin = new Thickness(largeLeftIndent, currMargin.Top, currMargin.Right, currMargin.Bottom);
+                Thickness currMargin = AppTitle.Margin;
+
+                if ((sender.DisplayMode == Muxc.NavigationViewDisplayMode.Expanded && sender.IsPaneOpen) ||
+                         sender.DisplayMode == Muxc.NavigationViewDisplayMode.Minimal)
+                {
+                    AppTitle.Margin = new Thickness(smallLeftIndent, currMargin.Top, currMargin.Right, currMargin.Bottom);
+                }
+                else
+                {
+                    AppTitle.Margin = new Thickness(largeLeftIndent, currMargin.Top, currMargin.Right, currMargin.Bottom);
+                }
             }
         }
 
