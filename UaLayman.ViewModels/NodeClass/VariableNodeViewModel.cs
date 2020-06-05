@@ -97,7 +97,7 @@ namespace UaLayman.ViewModels
             Update.Execute(VariableAttributes).Subscribe();
         }
 
-        private string ConvertToString(Variant variant)
+        private static string ConvertToString(Variant variant)
         {
             if (variant.ArrayDimensions != null && variant.ArrayDimensions.Length != 0)
                 return "Array";
