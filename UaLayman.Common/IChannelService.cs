@@ -17,5 +17,6 @@ namespace UaLayman
 
         IObservable<BrowseTreeNode[]> Browse();
         IObservable<DataValue[]> ReadAttributes(NodeId nodeId, IEnumerable<uint> attributeIds);
+        IObservable<DataValue> NodeValue(NodeId nodeId);
     }
 }

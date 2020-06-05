@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -210,6 +211,74 @@ namespace UaLayman.Services
 
                 obs.OnNext(response.Results);
             });
+        }
+
+        class VariableSubscription
+        {
+            public Subject<DataValue> Subject { get; } = new Subject<DataValue>();
+            public int Count { get; set; }
+        }
+
+        private readonly Dictionary<NodeId, VariableSubscription> _variables = new Dictionary<NodeId, VariableSubscription>();
+        private IDisposable _readCycle;
+
+        public IObservable<DataValue> NodeValue(NodeId nodeId)
+        {
+            if (!_variables.TryGetValue(nodeId, out var val))
+            {
+                val = new VariableSubscription();
+                _variables[nodeId] = val;
+
+                if (_readCycle == null)
+                {
+                    _readCycle = Observable
+                        .Interval(TimeSpan.FromSeconds(0.4))
+                        .SelectMany(_ => ReadCycleAsync(_variables))
+                        .ObserveOn(RxApp.MainThreadScheduler)
+                        .Subscribe(list =>
+                        {
+                            foreach (var (subject, value) in list)
+                            {
+                                subject.OnNext(value);
+                            }
+                        });
+                }
+            }
+
+            val.Count++;
+
+            return val.Subject.Finally(() =>
+            {
+                val.Count--;
+                if (val.Count == 0)
+                    _variables.Remove(nodeId);
+
+                if (_variables.Count == 0)
+                {
+                    _readCycle?.Dispose();
+                    _readCycle = null;
+                }
+            });
+        }
+
+        private async Task<IEnumerable<(Subject<DataValue>,DataValue)>> ReadCycleAsync(Dictionary<NodeId, VariableSubscription> dic)
+        {
+            var request = new ReadRequest
+            {
+                NodesToRead = dic
+                    .Select(kv => new ReadValueId
+                    {
+                        NodeId = kv.Key,
+                        AttributeId = AttributeIds.Value
+                    })
+                    .ToArray()
+            };
+
+            var response = await _channel.ReadAsync(request);
+
+            return Enumerable
+                .Zip(dic, response.Results, (kv, d) => (kv.Value.Subject, d))
+                .ToList();
         }
     }
 }

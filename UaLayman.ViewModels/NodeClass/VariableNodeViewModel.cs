@@ -95,6 +95,9 @@ namespace UaLayman.ViewModels
             });
 
             Update.Execute(VariableAttributes).Subscribe();
+
+            channel.NodeValue(NodeId)
+                .Subscribe(val => Value = ConvertToString(val.Variant));
         }
 
         private static string ConvertToString(Variant variant)
