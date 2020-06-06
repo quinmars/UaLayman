@@ -74,6 +74,7 @@ namespace UaLayman.ViewModels
 
             this.WhenAnyValue(x => x.SelectedItem)
                 .Select(item => NodeViewModel.Create(item, _channelService))
+                .DisposeLast()
                 .ToProperty(this, x => x.DetailViewModel, out _detailViewModel);
 
             /*

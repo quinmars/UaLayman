@@ -9,6 +9,8 @@ namespace UaLayman.ViewModels
 {
     public sealed class VariableNodeViewModel : BaseNodeViewModel
     {
+        private IDisposable _nodeValueSubscription;
+
         public static uint[] VariableAttributes { get; } = BaseAttributes.Concat(new[]
         {
             AttributeIds.Value,
@@ -96,8 +98,14 @@ namespace UaLayman.ViewModels
 
             Update.Execute(VariableAttributes).Subscribe();
 
-            channel.NodeValue(NodeId)
+            _nodeValueSubscription = channel.NodeValue(NodeId)
                 .Subscribe(val => Value = ConvertToString(val.Variant));
+        }
+
+        public override void Dispose()
+        {
+            _nodeValueSubscription?.Dispose();
+            base.Dispose();
         }
 
         private static string ConvertToString(Variant variant)

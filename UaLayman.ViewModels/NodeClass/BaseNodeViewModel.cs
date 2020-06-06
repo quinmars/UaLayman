@@ -8,7 +8,7 @@ using Workstation.ServiceModel.Ua;
 
 namespace UaLayman.ViewModels
 {
-    public class BaseNodeViewModel : ReactiveObject
+    public class BaseNodeViewModel : ReactiveObject, IDisposable
     {
         public static uint[] BaseAttributes { get; } = new[]
         {
@@ -81,5 +81,7 @@ namespace UaLayman.ViewModels
                 }
             });
         }
+
+        public virtual void Dispose() {}
     }
 }
