@@ -48,7 +48,7 @@
                              DisplayModeChanged="Navigation_DisplayModeChanged"
                              ItemInvoked="Navigation_ItemInvoked">
             <muxc:NavigationView.MenuItems>
-                <muxc:NavigationViewItem Content="Connection" Tag="Connection" IsSelected="{x:Bind ViewModel.IsOnConnectionView}">
+                <muxc:NavigationViewItem Content="Connection" Tag="Connection" IsSelected="{x:Bind ViewModel.IsOnConnectionView, Mode=OneWay}">
                     <muxc:NavigationViewItem.Icon>
                         <SymbolIcon Symbol="Link" Foreground="{x:Bind StateViewModel.State, Converter={StaticResource StateToColor}, Mode=OneWay}"/>
                     </muxc:NavigationViewItem.Icon>
