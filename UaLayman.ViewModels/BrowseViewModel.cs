@@ -42,6 +42,9 @@ namespace UaLayman.ViewModels
         private ObservableAsPropertyHelper<BaseNodeViewModel> _detailViewModel;
         public BaseNodeViewModel DetailViewModel => _detailViewModel.Value;
 
+        private ObservableAsPropertyHelper<bool> _isNotConnected;
+        public bool IsNotConnected => _isNotConnected.Value;
+
         public BrowseViewModel(IScreen screen, IChannelService channelService) : base(screen)
         {
             _channelService = channelService;
@@ -76,6 +79,11 @@ namespace UaLayman.ViewModels
                 .Select(item => NodeViewModel.Create(item, _channelService))
                 .DisposeLast()
                 .ToProperty(this, x => x.DetailViewModel, out _detailViewModel);
+
+            _channelService
+                .State
+                .Select(s => s != CommunicationState.Opened && s != CommunicationState.Opening)
+                .ToProperty(this, x => x.IsNotConnected, out _isNotConnected, true, scheduler: RxApp.MainThreadScheduler);
 
             /*
              * The error message
