@@ -13,8 +13,12 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 2.2.108
-    - name: Add msbuild to PATH
+    - name: Setup msbuild
       uses: microsoft/setup-msbuild@v1.0.0
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.2
+    - name: Restore Packages
+      run: nuget restore UaLayman.sln
     - name: Build with dotnet
       run: msbuild /p:Configuration=Release /p:Platform="Any CPU"
     - name: Run unit tests
