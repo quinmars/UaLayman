@@ -12,100 +12,103 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <UserControl.Resources>
         <cmn:ObjectToVisibilityConverter x:Key="HideWhenNull" />
+        <Style TargetType="TextBlock"
+               BasedOn="{StaticResource CaptionTextBlockStyle}"
+               x:Key="CaptionStyle">
+            <Setter Property="Foreground" Value="{ThemeResource ApplicationSecondaryForegroundThemeBrush}" />
+        </Style>
+        <DataTemplate x:Name="BaseTemplate" x:DataType="vms:BaseNodeViewModel">
+            <StackPanel Spacing="12" Margin="12">
+                <StackPanel>
+                    <TextBlock Text="Node ID" Style="{StaticResource CaptionStyle}"/>
+                    <TextBlock Text="{x:Bind NodeId}"
+                               TextWrapping="Wrap"
+                               IsTextSelectionEnabled="True" />
+                </StackPanel>
+
+                <StackPanel>
+                    <TextBlock Text="Browse name" Style="{StaticResource CaptionStyle}"/>
+                    <TextBlock Text="{x:Bind BrowseName}" IsTextSelectionEnabled="True"/>
+                </StackPanel>
+
+                <StackPanel Visibility="{x:Bind WriteMask, Converter={StaticResource HideWhenNull}, Mode=OneWay}">
+                    <TextBlock Text="Write mask" Style="{StaticResource CaptionStyle}"/>
+                    <TextBlock Text="{x:Bind WriteMask, Mode=OneWay}" IsTextSelectionEnabled="True" />
+                </StackPanel>
+
+                <StackPanel Visibility="{x:Bind UserWriteMask, Converter={StaticResource HideWhenNull}, Mode=OneWay}">
+                    <TextBlock Text="User write mask" Style="{StaticResource CaptionStyle}"/>
+                    <TextBlock Text="{Binding UserWriteMask, Mode=OneWay}" IsTextSelectionEnabled="True" />
+                </StackPanel>
+
+                <TextBlock Visibility="{x:Bind Description, Converter={StaticResource HideWhenNull}, Mode=OneWay}" 
+                           Text="{x:Bind Description, Mode=OneWay}"
+                           TextWrapping="WrapWholeWords"
+                           FontStyle="Italic"
+                           IsTextSelectionEnabled="True" />
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Name="VariableTemplate"
+                      x:DataType="vms:VariableNodeViewModel">
+            <StackPanel Spacing="12" Margin="12" HorizontalAlignment="Stretch">
+                <TextBlock Text="{x:Bind Value, Mode=OneWay}"
+                           Style="{StaticResource HeaderTextBlockStyle}"
+                           MinHeight="64"
+                           Foreground="{ThemeResource SystemAccentColor}"
+                           HorizontalAlignment="Right"
+                           IsTextSelectionEnabled="True" />
+                <StackPanel>
+                    <TextBlock Text="DataType" Style="{StaticResource CaptionStyle}"/>
+                    <TextBlock Text="{x:Bind DataType, Mode=OneWay}" IsTextSelectionEnabled="True" />
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Text="Node ID" Style="{StaticResource CaptionStyle}" />
+                    <TextBlock Text="{x:Bind NodeId}"
+                               TextWrapping="Wrap"
+                               IsTextSelectionEnabled="True" />
+                </StackPanel>
+
+                <StackPanel>
+                    <TextBlock Text="Browse name" Style="{StaticResource CaptionStyle}" />
+                    <TextBlock Text="{x:Bind BrowseName}" IsTextSelectionEnabled="True" />
+                </StackPanel>
+
+                <StackPanel Visibility="{x:Bind WriteMask, Converter={StaticResource HideWhenNull}, Mode=OneWay}">
+                    <TextBlock Text="Write mask" Style="{StaticResource CaptionStyle}"/>
+                    <TextBlock Text="{x:Bind WriteMask, Mode=OneWay}" IsTextSelectionEnabled="True" />
+                </StackPanel>
+
+                <StackPanel Visibility="{x:Bind UserWriteMask, Converter={StaticResource HideWhenNull}, Mode=OneWay}">
+                    <TextBlock Text="User write mask" Style="{StaticResource CaptionStyle}"/>
+                    <TextBlock Text="{x:Bind UserWriteMask, Mode=OneWay}" IsTextSelectionEnabled="True" />
+                </StackPanel>
+                
+                <TextBlock Visibility="{x:Bind Description, Converter={StaticResource HideWhenNull}, Mode=OneWay}" 
+                           Text="{x:Bind Description, Mode=OneWay}"
+                           TextWrapping="WrapWholeWords"
+                           FontStyle="Italic"
+                           IsTextSelectionEnabled="True" />
+            </StackPanel>
+        </DataTemplate>
     </UserControl.Resources>
 
     <SplitView IsPaneOpen="True" PanePlacement="Right" DisplayMode="Inline" PaneBackground="{ThemeResource SystemControlBackgroundChromeWhiteBrush}">
         <SplitView.Pane>
-            <ContentControl Content="{x:Bind ViewModel.DetailViewModel, Mode=OneWay}"
-                            HorizontalContentAlignment="Stretch">
-                <ContentControl.Resources>
-                    <Style TargetType="TextBlock"
-                           BasedOn="{StaticResource CaptionTextBlockStyle}"
-                           x:Key="CaptionStyle">
-                        <Setter Property="Foreground" Value="{ThemeResource ApplicationSecondaryForegroundThemeBrush}" />
-                    </Style>
-                </ContentControl.Resources>
-                <ContentControl.ContentTemplateSelector>
-                    <cmn:NodeViewSelector>
-                        <cmn:NodeViewSelector.BaseTemplate>
-                            <DataTemplate x:DataType="vms:BaseNodeViewModel">
-                                <StackPanel Spacing="12" Margin="12">
-                                    <StackPanel>
-                                        <TextBlock Text="Node ID" Style="{StaticResource CaptionStyle}"/>
-                                        <TextBlock Text="{x:Bind NodeId}"
-                                                   TextWrapping="Wrap"
-                                                   IsTextSelectionEnabled="True" />
-                                    </StackPanel>
-
-                                    <StackPanel>
-                                        <TextBlock Text="Browse name" Style="{StaticResource CaptionStyle}"/>
-                                        <TextBlock Text="{x:Bind BrowseName}" IsTextSelectionEnabled="True"/>
-                                    </StackPanel>
-
-                                    <StackPanel Visibility="{x:Bind WriteMask, Converter={StaticResource HideWhenNull}, Mode=OneWay}">
-                                        <TextBlock Text="Write mask" Style="{StaticResource CaptionStyle}"/>
-                                        <TextBlock Text="{x:Bind WriteMask, Mode=OneWay}" IsTextSelectionEnabled="True" />
-                                    </StackPanel>
-
-                                    <StackPanel Visibility="{x:Bind UserWriteMask, Converter={StaticResource HideWhenNull}, Mode=OneWay}">
-                                        <TextBlock Text="User write mask" Style="{StaticResource CaptionStyle}"/>
-                                        <TextBlock Text="{Binding UserWriteMask, Mode=OneWay}" IsTextSelectionEnabled="True" />
-                                    </StackPanel>
-
-                                    <TextBlock Visibility="{x:Bind Description, Converter={StaticResource HideWhenNull}, Mode=OneWay}" 
-                                               Text="{x:Bind Description, Mode=OneWay}"
-                                               TextWrapping="WrapWholeWords"
-                                               FontStyle="Italic"
-                                               IsTextSelectionEnabled="True" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </cmn:NodeViewSelector.BaseTemplate>
-                        <cmn:NodeViewSelector.VariableTemplate>
-                            <DataTemplate x:DataType="vms:VariableNodeViewModel">
-                                <StackPanel Spacing="12" Margin="12" HorizontalAlignment="Stretch">
-                                    <TextBlock Text="{x:Bind Value, Mode=OneWay}"
-                                               Style="{StaticResource HeaderTextBlockStyle}"
-                                               MinHeight="64"
-                                               Foreground="{ThemeResource SystemAccentColor}"
-                                               HorizontalAlignment="Right"
-                                               IsTextSelectionEnabled="True" />
-                                    <StackPanel>
-                                        <TextBlock Text="DataType" Style="{StaticResource CaptionStyle}"/>
-                                        <TextBlock Text="{x:Bind DataType, Mode=OneWay}" IsTextSelectionEnabled="True" />
-                                    </StackPanel>
-                                    <StackPanel>
-                                        <TextBlock Text="Node ID" Style="{StaticResource CaptionStyle}" />
-                                        <TextBlock Text="{x:Bind NodeId}"
-                                                   TextWrapping="Wrap"
-                                                   IsTextSelectionEnabled="True" />
-                                    </StackPanel>
-
-                                    <StackPanel>
-                                        <TextBlock Text="Browse name" Style="{StaticResource CaptionStyle}" />
-                                        <TextBlock Text="{x:Bind BrowseName}" IsTextSelectionEnabled="True" />
-                                    </StackPanel>
-
-                                    <StackPanel Visibility="{x:Bind WriteMask, Converter={StaticResource HideWhenNull}, Mode=OneWay}">
-                                        <TextBlock Text="Write mask" Style="{StaticResource CaptionStyle}"/>
-                                        <TextBlock Text="{x:Bind WriteMask, Mode=OneWay}" IsTextSelectionEnabled="True" />
-                                    </StackPanel>
-
-                                    <StackPanel Visibility="{x:Bind UserWriteMask, Converter={StaticResource HideWhenNull}, Mode=OneWay}">
-                                        <TextBlock Text="User write mask" Style="{StaticResource CaptionStyle}"/>
-                                        <TextBlock Text="{x:Bind UserWriteMask, Mode=OneWay}" IsTextSelectionEnabled="True" />
-                                    </StackPanel>
-                                    
-                                    <TextBlock Visibility="{x:Bind Description, Converter={StaticResource HideWhenNull}, Mode=OneWay}" 
-                                               Text="{x:Bind Description, Mode=OneWay}"
-                                               TextWrapping="WrapWholeWords"
-                                               FontStyle="Italic"
-                                               IsTextSelectionEnabled="True" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </cmn:NodeViewSelector.VariableTemplate>
-                    </cmn:NodeViewSelector>
-                </ContentControl.ContentTemplateSelector>
-            </ContentControl>
+            <StackPanel>
+                <CommandBar DefaultLabelPosition="Right" Background="Transparent">
+                    <AppBarToggleButton Icon="Add"
+                                        Label="Watch"
+                                        Command="{x:Bind ViewModel.WatchSelectedItem}"
+                                        IsChecked="{x:Bind ViewModel.IsWatchingSelectedItem, Mode=OneWay}"/>
+                </CommandBar>
+                <ContentControl Content="{x:Bind ViewModel.DetailViewModel, Mode=OneWay}"
+                                HorizontalContentAlignment="Stretch">
+                    <ContentControl.ContentTemplateSelector>
+                        <cmn:NodeViewSelector BaseTemplate="{StaticResource BaseTemplate}"
+                                              VariableTemplate="{StaticResource VariableTemplate}" />
+                    </ContentControl.ContentTemplateSelector>
+                </ContentControl>
+            </StackPanel>
         </SplitView.Pane>
         <Grid>
             <Grid.RowDefinitions>

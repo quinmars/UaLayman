@@ -45,14 +45,18 @@ namespace UaLayman.ViewModels
         private ObservableAsPropertyHelper<bool> _isNotConnected;
         public bool IsNotConnected => _isNotConnected.Value;
 
-        public BrowseViewModel(IScreen screen, IChannelService channelService) : base(screen)
+        private ObservableAsPropertyHelper<bool> _isWatchingSelectedItem;
+        public bool IsWatchingSelectedItem => _isWatchingSelectedItem.Value;
+
+        public ReactiveCommand<Unit, bool> WatchSelectedItem { get; }
+
+        public BrowseViewModel(IScreen screen, IChannelService channelService, ObservableCollection<WatchlistItemViewModel> watchlist) : base(screen)
         {
             _channelService = channelService;
 
             _browse = ReactiveCommand.CreateFromObservable(
                 () => _channelService
                     .Browse()
-                    .Do(n => Debug.WriteLine($"count: {n.Length}"))
                     .ToObservableChangeSet(r => r.NodeId));
 
             _browse
@@ -84,6 +88,37 @@ namespace UaLayman.ViewModels
                 .State
                 .Select(s => s != CommunicationState.Opened && s != CommunicationState.Opening)
                 .ToProperty(this, x => x.IsNotConnected, out _isNotConnected, true, scheduler: RxApp.MainThreadScheduler);
+
+            this.WhenAnyValue(x => x.DetailViewModel)
+                .Select(x => {
+                    if (x is VariableNodeViewModel vm)
+                        return watchlist
+                            .ToObservableChangeSet()
+                            .QueryWhenChanged(list => list.Any(item => item.NodeId == vm.NodeId));
+                    else
+                        return Observable.Return(false);
+                })
+                .Switch()
+                .ToProperty(this, x => x.IsWatchingSelectedItem, out _isWatchingSelectedItem);
+
+            var canWatch = this.WhenAnyValue(x => x.DetailViewModel)
+                .Select(x => x is VariableNodeViewModel);
+            WatchSelectedItem = ReactiveCommand.Create(() => IsWatchingSelectedItem == true, canWatch);
+            WatchSelectedItem.Subscribe(x =>
+            {
+                if (x)
+                {
+                    var item = watchlist.First(i => i.NodeId == SelectedItem.NodeId);
+                    watchlist.Remove(item);
+                }
+                else
+                {
+                    var selected = SelectedItem;
+                    var browsePath = selected.DisplayText;
+                    var item = new WatchlistItemViewModel(selected.NodeId, browsePath, _channelService);
+                    watchlist.Add(item);
+                }
+            });
 
             /*
              * The error message

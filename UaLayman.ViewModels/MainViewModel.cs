@@ -37,8 +37,8 @@ namespace UaLayman.ViewModels
         public MainViewModel(IDiscoveryService discoveryService, IChannelService channelService)
         {
             var connectionViewModel = new ConnectionViewModel(this, channelService, discoveryService);
-            var browseViewModel = new BrowseViewModel(this, channelService);
             var watchListViewModel = new WatchlistViewModel(this);
+            var browseViewModel = new BrowseViewModel(this, channelService, watchListViewModel.Items);
 
             Locator.CurrentMutable.RegisterLazySingleton(() => connectionViewModel, typeof(IRoutableViewModel), "Connection");
             Locator.CurrentMutable.RegisterLazySingleton(() => browseViewModel, typeof(IRoutableViewModel), "Browse");

@@ -1,6 +1,8 @@
-﻿using ReactiveUI;
+﻿using DynamicData;
+using ReactiveUI;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reactive;
 using System.Text;
@@ -10,7 +12,10 @@ namespace UaLayman.ViewModels
 {
     public class WatchlistViewModel : RoutableViewModelBase
     {
-        public ReactiveCommand<Unit, Unit> Watch { get; }
-        public WatchlistViewModel(IScreen screen) : base(screen) { }
+        public ObservableCollection<WatchlistItemViewModel> Items { get; } = new ObservableCollection<WatchlistItemViewModel>();
+
+        public WatchlistViewModel(IScreen screen) : base(screen)
+        {
+        }
     }
 }
