@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:wctc="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:wctui="using:Microsoft.Toolkit.Uwp.UI"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
@@ -19,5 +20,15 @@
                 <wctc:DataGridTextColumn Header="Value" Binding="{Binding Value}" />
             </wctc:DataGrid.Columns>
         </wctc:DataGrid>
+    
+        <TextBlock Margin="10 50"
+                   Visibility="{x:Bind ViewModel.IsEmpty, Mode=OneWay}"
+                   TextWrapping="WrapWholeWords"
+                   Style="{ThemeResource CaptionTextBlockStyle}"
+                   HorizontalAlignment="Left">
+            The watchlist is empty. You can add items to it in the
+            <Hyperlink wctui:HyperlinkExtensions.Command="{x:Bind ViewModel.NavigateTo}"
+                       wctui:HyperlinkExtensions.CommandParameter="Browse">browse tree</Hyperlink>. 
+        </TextBlock>
     </Grid>
 </UserControl>
