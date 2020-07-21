@@ -15,7 +15,7 @@ namespace UaLayman.ViewModels
     {
         private readonly IDisposable _cleanUp;
 
-        public string DisplayText => BrowseTreeNode.ReferenceDescription.BrowseName.Name;
+        public string DisplayText => BrowseTreeNode.ReferenceDescription.DisplayName.Text;
         public BrowseTreeNode BrowseTreeNode { get; }
         public NodeId NodeId { get; }
         
