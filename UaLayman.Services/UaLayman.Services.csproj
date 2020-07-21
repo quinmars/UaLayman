@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -7,7 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="ReactiveUI" Version="11.1.23" />
-    <PackageReference Include="Workstation.UaClient" Version="2.5.0" />
+    <PackageReference Include="Workstation.UaClient" Version="2.6.0" />
   </ItemGroup>
 
   <ItemGroup>
