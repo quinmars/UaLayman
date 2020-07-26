@@ -36,6 +36,15 @@ namespace UaLayman.ViewModels
             set => this.RaiseAndSetIfChanged(ref _connectionString, value);
         }
 
+        private ObservableAsPropertyHelper<bool> _isConnectionStringValidating;
+        public bool IsConnectionStringValidating => _isConnectionStringValidating.Value;
+
+        private ObservableAsPropertyHelper<bool> _isConnectionStringFailed;
+        public bool IsConnectionStringFailed => _isConnectionStringFailed.Value;
+
+        private ObservableAsPropertyHelper<bool> _isConnectionStringOk;
+        public bool IsConnectionStringOk => _isConnectionStringOk.Value;
+
         private ObservableAsPropertyHelper<EndpointDescription[]> _availableEndpoints;
         public EndpointDescription[] AvailableEndpoints => _availableEndpoints.Value;
 
@@ -107,7 +116,23 @@ namespace UaLayman.ViewModels
                 .ToProperty(this, x => x.AvailableEndpoints, out _availableEndpoints, null);
 
             Discover.IsExecuting
-                .ToProperty(this, x => x.IsSearchingForSecurityPolicies,  out _isSearchingForSecurityPolicies, false);
+                .ToProperty(this, x => x.IsConnectionStringValidating,  out _isConnectionStringValidating, false);
+
+            var typing = this.WhenAnyValue(x => x.ConnectionString)
+                .Select(_ => false);
+
+            Observable.Merge(
+                Discover.Select(_ => true),
+                typing)
+                .ToProperty(this, x => x.IsConnectionStringOk, out _isConnectionStringOk);
+
+            Observable.Merge(
+                Discover.ThrownExceptions.Select(_ => true),
+                typing)
+                .ToProperty(this, x => x.IsConnectionStringFailed, out _isConnectionStringFailed);
+
+            this.WhenAnyValue(x => x.IsConnectionStringValidating)
+                .ToProperty(this, x => x.IsSearchingForSecurityPolicies, out _isSearchingForSecurityPolicies);
 
             this.WhenAnyValue(x => x.AvailableEndpoints)
                 .Select(x => x?.Select(e => e.SecurityPolicyUri).Distinct())

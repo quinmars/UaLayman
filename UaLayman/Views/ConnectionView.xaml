@@ -31,13 +31,37 @@
                        Margin="0,10,0,0"
                        FontWeight="Normal" />
             <StackPanel Margin="0,10,0,0">
-                <AutoSuggestBox Header="Enter here the connection string."
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="45" />
+                    </Grid.ColumnDefinitions>
+                    <AutoSuggestBox Header="Enter here the connection string."
                                 PlaceholderText="opc.tcp//local:4040"
                                 Text="{x:Bind ViewModel.ConnectionString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                 ItemsSource="{x:Bind ViewModel.ConnectionSuggestions, Mode=OneWay}"
                                 QuerySubmitted="AutoSuggestBox_QuerySubmitted"
                                 DisplayMemberPath="ConnectionString"
                                 TextMemberPath="ConnectionString" />
+                    <ProgressRing Grid.Column="1"
+                                  IsActive="{x:Bind ViewModel.IsConnectionStringValidating, Mode=OneWay}"
+                                  VerticalAlignment="Bottom"
+                                  HorizontalAlignment="Center"
+                                  Margin="0,0,0,5" />
+                    <FontIcon Grid.Column="1"
+                              Visibility="{x:Bind ViewModel.IsConnectionStringOk, Mode=OneWay}"
+                              FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE73E;" 
+                              VerticalAlignment="Bottom"
+                              HorizontalAlignment="Center"
+                              Margin="0,0,0,8" />
+                    <FontIcon Grid.Column="1"
+                              Visibility="{x:Bind ViewModel.IsConnectionStringFailed, Mode=OneWay}"
+                              FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE945;"
+                              VerticalAlignment="Bottom"
+                              HorizontalAlignment="Center"
+                              Margin="0,0,0,8" />
+                </Grid>
                 <TextBlock Text="This needs to be the fully qualified string, including tcp.opc:// and the port number. After entering press enter."
                        Style="{ThemeResource CaptionTextBlockStyle}"
                        HorizontalAlignment="Left"
@@ -50,50 +74,30 @@
                        Margin="0,40,0,0"
                        FontWeight="Normal" />
             <StackPanel Margin="0,10,0,0" Spacing="10">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <ComboBox ItemsSource="{x:Bind ViewModel.AvailableSecurityPolicies, Mode=OneWay}"
-                              SelectedValue="{x:Bind ViewModel.SelectedSecurityPolicy, Mode=TwoWay}"
-                              HorizontalAlignment="Stretch"
-                              IsEnabled="{x:Bind conv:Utils.Inverse(ViewModel.IsSearchingForSecurityPolicies), Mode=OneWay}"
-                              Header="Select a security policy">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate x:DataType="sys:String">
-                                <TextBlock Text="{x:Bind Converter={StaticResource BeautifyUrl}}"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                    <ProgressRing Grid.Column="1"
-                              IsActive="{x:Bind ViewModel.IsSearchingForSecurityPolicies, Mode=OneWay}"
-                              VerticalAlignment="Bottom"
-                              Margin="10,0,0,5" />
-                </Grid>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <ComboBox ItemsSource="{x:Bind ViewModel.AvailableSecurityModes, Mode=OneWay}"
-                              SelectedItem="{x:Bind ViewModel.SelectedSecurityMode, Mode=TwoWay}"
-                              HorizontalAlignment="Stretch"
-                              IsEnabled="{x:Bind conv:Utils.Inverse(ViewModel.IsSearchingForSecurityPolicies), Mode=OneWay}"
-                              Header="Select a security mode">
-                        <!--
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate x:DataType="ua:MessageSecurityMode">
-                                <TextBlock Text="{x:Bind Converter={StaticResource ModeToString}}"/>
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                        -->
-                    </ComboBox>
-                    <ProgressRing Grid.Column="1"
-                                  IsActive="{x:Bind ViewModel.IsSearchingForSecurityPolicies, Mode=OneWay}"
-                                  VerticalAlignment="Bottom"
-                                  Margin="10,0,0,5" />
-                </Grid>
+                <ComboBox ItemsSource="{x:Bind ViewModel.AvailableSecurityPolicies, Mode=OneWay}"
+                          SelectedValue="{x:Bind ViewModel.SelectedSecurityPolicy, Mode=TwoWay}"
+                          HorizontalAlignment="Stretch"
+                          IsEnabled="{x:Bind conv:Utils.Inverse(ViewModel.IsSearchingForSecurityPolicies), Mode=OneWay}"
+                          Header="Select a security policy">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="sys:String">
+                            <TextBlock Text="{x:Bind Converter={StaticResource BeautifyUrl}}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <ComboBox ItemsSource="{x:Bind ViewModel.AvailableSecurityModes, Mode=OneWay}"
+                          SelectedItem="{x:Bind ViewModel.SelectedSecurityMode, Mode=TwoWay}"
+                          HorizontalAlignment="Stretch"
+                          IsEnabled="{x:Bind conv:Utils.Inverse(ViewModel.IsSearchingForSecurityPolicies), Mode=OneWay}"
+                          Header="Select a security mode">
+                    <!--
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="ua:MessageSecurityMode">
+                            <TextBlock Text="{x:Bind Converter={StaticResource ModeToString}}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                    -->
+                </ComboBox>
             </StackPanel>
             <TextBlock TextWrapping="WrapWholeWords"
                        Foreground="Red"
