@@ -20,7 +20,8 @@ namespace UaLayman.ViewModels
         private ObservableAsPropertyHelper<bool> _isEmpty;
         public bool IsEmpty => _isEmpty.Value;
 
-        public WatchlistViewModel(IScreen screen) : base(screen)
+        public WatchlistViewModel(IScreen screen)
+            : base(screen, "Watchlist")
         {
             Items
                 .ToObservableChangeSet()

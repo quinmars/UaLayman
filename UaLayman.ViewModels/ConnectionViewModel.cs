@@ -91,7 +91,8 @@ namespace UaLayman.ViewModels
         private readonly ISubject<Unit> _startDiscover;
         public void StartDiscover() => _startDiscover.OnNext(default);
 
-        public ConnectionViewModel(IScreen screen, IChannelService channelService, IDiscoveryService discoveryService) : base(screen)
+        public ConnectionViewModel(IScreen screen, IChannelService channelService, IDiscoveryService discoveryService)
+            : base(screen, "Connection")
         {
             _channelService = channelService;
             _discoverService = discoveryService;

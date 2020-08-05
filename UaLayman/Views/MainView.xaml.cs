@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using UaLayman.Common;
 using UaLayman.ViewModels;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
@@ -24,7 +25,7 @@ using Muxc = Microsoft.UI.Xaml.Controls;
 
 namespace UaLayman.Views
 {
-    public sealed partial class MainView : Page, IViewFor<MainViewModel>
+    public sealed partial class MainView : Page, IViewFor<MainViewModel>, IThemeService
     {
         public ConnectionStateViewModel StateViewModel { get; }
 
@@ -37,6 +38,10 @@ namespace UaLayman.Views
 
             ViewModel = new MainViewModel(discoveryService, channelService);
             StateViewModel = new ConnectionStateViewModel(channelService);
+
+            // The settings
+            var settingsViewModel = new SettingsViewModel(ViewModel, this);
+            Locator.CurrentMutable.RegisterLazySingleton(() => settingsViewModel, typeof(IRoutableViewModel), "Settings");
 
             Window.Current.SetTitleBar(AppTitleBar);
             //CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = true;
@@ -66,6 +71,22 @@ namespace UaLayman.Views
             set => ViewModel = (MainViewModel)value;
         }
 
+        public void RequestTheme(ThemeMode mode)
+        {
+            switch (mode)
+            {
+                case ThemeMode.Light:
+                    RequestedTheme = ElementTheme.Light;
+                    break;
+                case ThemeMode.Dark:
+                    RequestedTheme = ElementTheme.Dark;
+                    break;
+                default:
+                    RequestedTheme = ElementTheme.Default;
+                    break;
+            }
+        }
+
         private void OnPaneDisplayModeChanged(DependencyObject sender, DependencyProperty dp)
         {
             var navigationView = sender as Muxc.NavigationView;
@@ -74,12 +95,14 @@ namespace UaLayman.Views
 
         private void Navigation_ItemInvoked(Muxc.NavigationView sender, Muxc.NavigationViewItemInvokedEventArgs args)
         {
-            var tag = args.InvokedItem as string;
-
-            if (tag == null)
-                return;
-
-            ViewModel.NavigateTo.Execute(tag).Subscribe();
+            if (args.InvokedItem is string tag)
+            {
+                ViewModel.NavigateTo.Execute(tag).Subscribe();
+            }
+            else if (args.IsSettingsInvoked)
+            {
+                ViewModel.NavigateTo.Execute("Settings").Subscribe();
+            }
         }
 
         private void UpdateAppTitle(CoreApplicationViewTitleBar coreTitleBar)

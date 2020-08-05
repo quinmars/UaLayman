@@ -43,6 +43,8 @@ namespace UaLayman
             Locator.CurrentMutable.Register(() => new ConnectionView(), typeof(IViewFor<ConnectionViewModel>));
             Locator.CurrentMutable.Register(() => new BrowseView(), typeof(IViewFor<BrowseViewModel>));
             Locator.CurrentMutable.Register(() => new WatchlistView(), typeof(IViewFor<WatchlistViewModel>));
+            Locator.CurrentMutable.Register(() => new SettingsView(), typeof(IViewFor<SettingsViewModel>));
+
         }
 
         protected override void OnLaunched(LaunchActivatedEventArgs e)

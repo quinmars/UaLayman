@@ -7,10 +7,11 @@
     xmlns:rxui="using:ReactiveUI"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     xmlns:converters="using:UaLayman.Converters"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
     <Page.Resources>
         <converters:StateToBrushConverter x:Key="StateToColor"
-                                          DefaultBrush="Black"
+                                          DefaultBrush="{StaticResource ApplicationForegroundThemeBrush}"
                                           FaultBrush="#FFcc3340"
                                           ConnectionBrush="#FF038153" />
         
@@ -36,7 +37,7 @@
         </Border>
         <muxc:NavigationView x:Name="NavigationViewControl"
                              Canvas.ZIndex="0"
-                             Header="{Binding ElementName=NavigationViewControl, Path=SelectedItem.Content}"
+                             Header="{x:Bind ViewModel.HeaderText, Mode=OneWay}"
                              HeaderTemplate="{StaticResource HeaderTemplate}"
                              AlwaysShowHeader="True"
                              IsTabStop="False"

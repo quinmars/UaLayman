@@ -92,7 +92,7 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <SplitView IsPaneOpen="True" PanePlacement="Right" DisplayMode="Inline" PaneBackground="{ThemeResource SystemControlBackgroundChromeWhiteBrush}">
+    <SplitView IsPaneOpen="True" PanePlacement="Right" DisplayMode="Inline" PaneBackground="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <SplitView.Pane>
             <StackPanel>
                 <CommandBar DefaultLabelPosition="Right" Background="Transparent">

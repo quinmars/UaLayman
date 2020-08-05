@@ -34,6 +34,9 @@ namespace UaLayman.ViewModels
         private readonly ObservableAsPropertyHelper<bool> _isOnWatchlistView;
         public bool IsOnWatchlistView => _isOnWatchlistView.Value;
 
+        private readonly ObservableAsPropertyHelper<string> _headerText;
+        public string HeaderText => _headerText.Value;
+
         public MainViewModel(IDiscoveryService discoveryService, IChannelService channelService)
         {
             var connectionViewModel = new ConnectionViewModel(this, channelService, discoveryService);
@@ -63,6 +66,17 @@ namespace UaLayman.ViewModels
             Router.CurrentViewModel
                 .Select(x => x is WatchlistViewModel)
                 .ToProperty(this, x => x.IsOnWatchlistView, out _isOnWatchlistView, false);
+
+            Router.CurrentViewModel
+                .Select(x =>
+                {
+                    if (x is RoutableViewModelBase vm)
+                    {
+                        return vm.HeaderText;
+                    }
+                    return null;
+                })
+                .ToProperty(this, x => x.HeaderText, out _headerText);
 
             GoBack.CanExecute
                 .ToProperty(this, x => x.CanGoBack, out _CanGoBack, false);

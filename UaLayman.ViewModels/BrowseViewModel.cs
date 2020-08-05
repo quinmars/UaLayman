@@ -50,7 +50,8 @@ namespace UaLayman.ViewModels
 
         public ReactiveCommand<Unit, bool> WatchSelectedItem { get; }
 
-        public BrowseViewModel(IScreen screen, IChannelService channelService, ObservableCollection<WatchlistItemViewModel> watchlist) : base(screen)
+        public BrowseViewModel(IScreen screen, IChannelService channelService, ObservableCollection<WatchlistItemViewModel> watchlist)
+            : base(screen, "Browse")
         {
             _channelService = channelService;
 
