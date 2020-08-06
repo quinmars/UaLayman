@@ -23,6 +23,12 @@ namespace UaLayman.ViewModels
         private readonly ObservableAsPropertyHelper<CommunicationState> _State;
         public CommunicationState State => _State.Value;
 
+        private readonly ObservableAsPropertyHelper<bool> _isConnected;
+        public bool IsConnected => _isConnected.Value;
+
+        private readonly ObservableAsPropertyHelper<bool> _faulted;
+        public bool Faulted => _faulted.Value;
+
         public ConnectionStateViewModel(IChannelService channelService)
         {
             _channelService = channelService;
@@ -30,6 +36,14 @@ namespace UaLayman.ViewModels
             _channelService.State
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .ToProperty(this, x => x.State, out _State);
+            
+            this.WhenAnyValue(x => x.State)
+                .Select(x => x is CommunicationState.Opened)
+                .ToProperty(this, x => x.IsConnected, out _isConnected);
+
+            this.WhenAnyValue(x => x.State)
+                .Select(x => x is CommunicationState.Faulted)
+                .ToProperty(this, x => x.Faulted, out _faulted);
         }
     }
 }

@@ -10,11 +10,6 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
     mc:Ignorable="d">
     <Page.Resources>
-        <converters:StateToBrushConverter x:Key="StateToColor"
-                                          DefaultBrush="{StaticResource ApplicationForegroundThemeBrush}"
-                                          FaultBrush="#FFcc3340"
-                                          ConnectionBrush="#FF038153" />
-        
         <DataTemplate x:Key="HeaderTemplate">
             <Border Margin="8,24,0,0">
                 <TextBlock Style="{ThemeResource SubheaderTextBlockStyle}"
@@ -24,6 +19,26 @@
     </Page.Resources>
 
     <Grid>
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="Connected">
+                    <VisualState.StateTriggers>
+                        <StateTrigger IsActive="{x:Bind StateViewModel.IsConnected, Mode=OneWay}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="ConnectionIcon.Foreground" Value="#FF038153" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="Faulted">
+                    <VisualState.StateTriggers>
+                        <StateTrigger IsActive="{x:Bind StateViewModel.Faulted, Mode=OneWay}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="ConnectionIcon.Foreground" Value="#FFcc3340" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
         <Border x:Name="AppTitleBar"
                 IsHitTestVisible="True"
                 VerticalAlignment="Top"
@@ -51,7 +66,7 @@
             <muxc:NavigationView.MenuItems>
                 <muxc:NavigationViewItem Content="Connection" Tag="Connection" IsSelected="{x:Bind ViewModel.IsOnConnectionView, Mode=OneWay}">
                     <muxc:NavigationViewItem.Icon>
-                        <SymbolIcon Symbol="Link" Foreground="{x:Bind StateViewModel.State, Converter={StaticResource StateToColor}, Mode=OneWay}"/>
+                        <SymbolIcon x:Name="ConnectionIcon" Symbol="Link" />
                     </muxc:NavigationViewItem.Icon>
                 </muxc:NavigationViewItem>
                 <muxc:NavigationViewItem Icon="Library" Content="Browse" Tag="Browse" IsSelected="{x:Bind ViewModel.IsOnBrowseView, Mode=OneWay}"/>
