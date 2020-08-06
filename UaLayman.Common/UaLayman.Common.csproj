@@ -9,8 +9,4 @@
     <PackageReference Include="Workstation.UaClient" Version="2.6.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Observable\" />
-  </ItemGroup>
-
 </Project>
