@@ -19,8 +19,7 @@ namespace UaLayman.ViewModels
         public BrowseTreeNode BrowseTreeNode { get; }
         public NodeId NodeId { get; }
         
-        private ObservableCollectionExtended<BrowseItemViewModel> _children = new ObservableCollectionExtended<BrowseItemViewModel>();
-        public ObservableCollectionExtended<BrowseItemViewModel> Children => _children;
+        public ObservableCollectionExtended<BrowseItemViewModel> Children { get; } = new ObservableCollectionExtended<BrowseItemViewModel>();
 
         private bool _isExpanded;
         public bool IsExpanded
@@ -45,7 +44,7 @@ namespace UaLayman.ViewModels
             var childrenLoader = new Lazy<IDisposable>(
                 () => node.Children.Connect()
                     .Transform(e => new BrowseItemViewModel(e, this, root))
-                    .Bind(_children)
+                    .Bind(Children)
                     .DisposeMany()
                     .Subscribe()
             );

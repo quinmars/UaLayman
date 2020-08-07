@@ -22,13 +22,13 @@ namespace UaLayman.ViewModels
         private readonly ReadOnlyObservableCollection<BrowseItemViewModel> _nodes;
         public ReadOnlyObservableCollection<BrowseItemViewModel> Nodes => _nodes;
 
-        private ObservableAsPropertyHelper<bool> _isBrowsing;
+        private readonly ObservableAsPropertyHelper<bool> _isBrowsing;
         public bool IsBrowsing => _isBrowsing.Value;
         
-        private ObservableAsPropertyHelper<string> _executionError;
+        private readonly ObservableAsPropertyHelper<string> _executionError;
         public string ExecutionError => _executionError.Value;
 
-        private ObservableAsPropertyHelper<bool> _hasExecutionError;
+        private readonly ObservableAsPropertyHelper<bool> _hasExecutionError;
         public bool HasExecutionError => _hasExecutionError.Value;
 
         private BrowseItemViewModel _selectedItem;
@@ -38,13 +38,13 @@ namespace UaLayman.ViewModels
             set => this.RaiseAndSetIfChanged(ref _selectedItem, value);
         }
 
-        private ObservableAsPropertyHelper<BaseNodeViewModel> _detailViewModel;
+        private readonly ObservableAsPropertyHelper<BaseNodeViewModel> _detailViewModel;
         public BaseNodeViewModel DetailViewModel => _detailViewModel.Value;
 
-        private ObservableAsPropertyHelper<bool> _isNotConnected;
+        private readonly ObservableAsPropertyHelper<bool> _isNotConnected;
         public bool IsNotConnected => _isNotConnected.Value;
 
-        private ObservableAsPropertyHelper<bool> _isWatchingSelectedItem;
+        private readonly ObservableAsPropertyHelper<bool> _isWatchingSelectedItem;
         public bool IsWatchingSelectedItem => _isWatchingSelectedItem.Value;
 
         public ReactiveCommand<Unit, bool> WatchSelectedItem { get; }

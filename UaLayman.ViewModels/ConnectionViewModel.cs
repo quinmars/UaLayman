@@ -32,22 +32,22 @@ namespace UaLayman.ViewModels
             set => this.RaiseAndSetIfChanged(ref _connectionString, value);
         }
 
-        private ObservableAsPropertyHelper<bool> _isConnectionStringValidating;
+        private readonly ObservableAsPropertyHelper<bool> _isConnectionStringValidating;
         public bool IsConnectionStringValidating => _isConnectionStringValidating.Value;
 
-        private ObservableAsPropertyHelper<bool> _isConnectionStringFailed;
+        private readonly ObservableAsPropertyHelper<bool> _isConnectionStringFailed;
         public bool IsConnectionStringFailed => _isConnectionStringFailed.Value;
 
-        private ObservableAsPropertyHelper<bool> _isConnectionStringOk;
+        private readonly ObservableAsPropertyHelper<bool> _isConnectionStringOk;
         public bool IsConnectionStringOk => _isConnectionStringOk.Value;
 
-        private ObservableAsPropertyHelper<EndpointDescription[]> _availableEndpoints;
+        private readonly ObservableAsPropertyHelper<EndpointDescription[]> _availableEndpoints;
         public EndpointDescription[] AvailableEndpoints => _availableEndpoints.Value;
 
-        private ObservableAsPropertyHelper<EndpointDescription> _selectedEndpoint;
+        private readonly ObservableAsPropertyHelper<EndpointDescription> _selectedEndpoint;
         public EndpointDescription SelectedEndpoint => _selectedEndpoint.Value;
 
-        private ObservableAsPropertyHelper<IEnumerable<string>> _availableSecurityPolicies;
+        private readonly ObservableAsPropertyHelper<IEnumerable<string>> _availableSecurityPolicies;
         public IEnumerable<string> AvailableSecurityPolicies => _availableSecurityPolicies.Value;
 
         private string _selectedSecurityPolicy;
@@ -57,7 +57,7 @@ namespace UaLayman.ViewModels
             set => this.RaiseAndSetIfChanged(ref _selectedSecurityPolicy, value);
         }
 
-        private ObservableAsPropertyHelper<IEnumerable<string>> _availableSecurityModes;
+        private readonly ObservableAsPropertyHelper<IEnumerable<string>> _availableSecurityModes;
         public IEnumerable<string> AvailableSecurityModes => _availableSecurityModes.Value;
 
         private string _selectedSecurityMode;
@@ -67,10 +67,10 @@ namespace UaLayman.ViewModels
             set => this.RaiseAndSetIfChanged(ref _selectedSecurityMode, value);
         }
 
-        private ObservableAsPropertyHelper<bool> _isSearchingForSecurityPolicies;
+        private readonly ObservableAsPropertyHelper<bool> _isSearchingForSecurityPolicies;
         public bool IsSearchingForSecurityPolicies => _isSearchingForSecurityPolicies.Value;
 
-        private ObservableAsPropertyHelper<string> _executionError;
+        private readonly ObservableAsPropertyHelper<string> _executionError;
         public string ExecutionError => _executionError.Value;
 
         private ReactiveCommand<string, EndpointDescription[]> Discover {get;}
@@ -78,7 +78,7 @@ namespace UaLayman.ViewModels
         public ReactiveCommand<Unit, Unit> Disconnect { get; } 
         public ReactiveCommand<Unit, Unit> Connect { get; }
 
-        private ObservableAsPropertyHelper<bool> _IsConnectingOrDisconnecting;
+        private readonly ObservableAsPropertyHelper<bool> _IsConnectingOrDisconnecting;
         public bool IsConnectingOrDisconnecting => _IsConnectingOrDisconnecting.Value;
 
         private ReadOnlyObservableCollection<ConnectionConfiguration> _connectionSuggestions;

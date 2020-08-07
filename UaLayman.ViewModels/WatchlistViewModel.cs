@@ -17,7 +17,7 @@ namespace UaLayman.ViewModels
     {
         public ObservableCollection<WatchlistItemViewModel> Items { get; } = new ObservableCollection<WatchlistItemViewModel>();
 
-        private ObservableAsPropertyHelper<bool> _isEmpty;
+        private readonly ObservableAsPropertyHelper<bool> _isEmpty;
         public bool IsEmpty => _isEmpty.Value;
 
         public WatchlistViewModel(IScreen screen)
