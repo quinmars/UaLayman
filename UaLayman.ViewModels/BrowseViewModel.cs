@@ -17,7 +17,6 @@ namespace UaLayman.ViewModels
 {
     public class BrowseViewModel : RoutableViewModelBase
     {
-        private readonly IChannelService _channelService;
         private readonly ReactiveCommand<Unit, IChangeSet<BrowseTreeNode, NodeId>> _browse;
 
         private readonly ReadOnlyObservableCollection<BrowseItemViewModel> _nodes;
@@ -53,10 +52,8 @@ namespace UaLayman.ViewModels
         public BrowseViewModel(IScreen screen, IChannelService channelService, ObservableCollection<WatchlistItemViewModel> watchlist)
             : base(screen, "Browse")
         {
-            _channelService = channelService;
-
             _browse = ReactiveCommand.CreateFromObservable(
-                () => _channelService
+                () => channelService
                     .Browse()
                     .ToObservableChangeSet(r => r.NodeId));
 
@@ -70,7 +67,7 @@ namespace UaLayman.ViewModels
             _browse.IsExecuting
                 .ToProperty(this, x => x.IsBrowsing, out _isBrowsing);
 
-            _channelService
+            channelService
                 .State
                 .Where(s => s == CommunicationState.Opened)
                 .Select(_ => _browse
@@ -81,11 +78,11 @@ namespace UaLayman.ViewModels
                 .Subscribe();
 
             this.WhenAnyValue(x => x.SelectedItem)
-                .Select(item => NodeViewModel.Create(item, _channelService))
+                .Select(item => NodeViewModel.Create(item, channelService))
                 .DisposeLast()
                 .ToProperty(this, x => x.DetailViewModel, out _detailViewModel);
 
-            _channelService
+            channelService
                 .State
                 .Select(s => s != CommunicationState.Opened && s != CommunicationState.Opening)
                 .ToProperty(this, x => x.IsNotConnected, out _isNotConnected, true, scheduler: RxApp.MainThreadScheduler);
@@ -116,7 +113,7 @@ namespace UaLayman.ViewModels
                 {
                     var selected = SelectedItem;
                     var browsePath = selected.DisplayText;
-                    var item = new WatchlistItemViewModel(selected.NodeId, browsePath, _channelService);
+                    var item = new WatchlistItemViewModel(selected.NodeId, browsePath, channelService);
                     watchlist.Add(item);
                 }
             });

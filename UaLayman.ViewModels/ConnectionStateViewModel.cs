@@ -18,8 +18,6 @@ namespace UaLayman.ViewModels
 {
     public class ConnectionStateViewModel : ReactiveObject
     {
-        private readonly IChannelService _channelService;
-
         private readonly ObservableAsPropertyHelper<CommunicationState> _State;
         public CommunicationState State => _State.Value;
 
@@ -31,9 +29,7 @@ namespace UaLayman.ViewModels
 
         public ConnectionStateViewModel(IChannelService channelService)
         {
-            _channelService = channelService;
-
-            _channelService.State
+            channelService.State
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .ToProperty(this, x => x.State, out _State);
             

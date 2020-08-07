@@ -25,10 +25,6 @@ namespace UaLayman.ViewModels
             public MessageSecurityMode SecurityMode { get; set; }
         }
 
-        private readonly IChannelService _channelService;
-        private readonly IDiscoveryService _discoverService;
-        private readonly SourceCache<ConnectionConfiguration, string> _connectionConfigurations;
-
         private string _connectionString;
         public string ConnectionString
         {
@@ -94,9 +90,7 @@ namespace UaLayman.ViewModels
         public ConnectionViewModel(IScreen screen, IChannelService channelService, IDiscoveryService discoveryService)
             : base(screen, "Connection")
         {
-            _channelService = channelService;
-            _discoverService = discoveryService;
-            _connectionConfigurations = new SourceCache<ConnectionConfiguration, string>(x => x.ConnectionString);
+            var connectionConfigurations = new SourceCache<ConnectionConfiguration, string>(x => x.ConnectionString);
 
             _startDiscover = new Subject<Unit>();
             _startDiscover
@@ -108,7 +102,7 @@ namespace UaLayman.ViewModels
                 .Switch()
                 .Subscribe();
 
-            Discover = ReactiveCommand.CreateFromObservable((string s) => _discoverService.GetEndpoints(s));
+            Discover = ReactiveCommand.CreateFromObservable((string s) => discoveryService.GetEndpoints(s));
 
             Observable.Merge(
                     Discover,
@@ -152,7 +146,7 @@ namespace UaLayman.ViewModels
                 })
                 .ToProperty(this, x => x.AvailableSecurityModes, out _availableSecurityModes, null);
 
-            _connectionConfigurations
+            connectionConfigurations
                 .Connect()
                 .Filter(s =>
                 {
@@ -189,7 +183,7 @@ namespace UaLayman.ViewModels
             /*
              * Connecting commands
              */
-            var notConnected = _channelService.State
+            var notConnected = channelService.State
                 .Select(s => s == CommunicationState.Closed || s == CommunicationState.Faulted || s == CommunicationState.Created)
                 .ObserveOn(RxApp.MainThreadScheduler);
 
@@ -201,21 +195,21 @@ namespace UaLayman.ViewModels
                 notConnected,
                 (s, c) => s && c);
 
-            Connect = ReactiveCommand.CreateFromObservable(() => _channelService.Connect(SelectedEndpoint), canConnect);
+            Connect = ReactiveCommand.CreateFromObservable(() => channelService.Connect(SelectedEndpoint), canConnect);
             Connect.Subscribe();
 
-            var canDisconnect = _channelService.State
+            var canDisconnect = channelService.State
                 .Select(s => s == CommunicationState.Opened || s == CommunicationState.Opening)
                 .ObserveOn(RxApp.MainThreadScheduler);
 
-            Disconnect = ReactiveCommand.CreateFromObservable(() => _channelService.Disconnect(), canDisconnect);
+            Disconnect = ReactiveCommand.CreateFromObservable(() => channelService.Disconnect(), canDisconnect);
             Disconnect.Subscribe();
 
             Observable.CombineLatest(Connect.IsExecuting, Disconnect.IsExecuting, (c, d) => c || d)
                 .ToProperty(this, x => x.IsConnectingOrDisconnecting, out _IsConnectingOrDisconnecting, false);
 
 
-            _channelService.State
+            channelService.State
                 .Where(s => s == CommunicationState.Opened)
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Select(_ => NavigateTo.Execute("Browse"))
@@ -234,14 +228,14 @@ namespace UaLayman.ViewModels
                         SecurityMode = Enum.TryParse<MessageSecurityMode>(SelectedSecurityMode, out var val) ? val : MessageSecurityMode.Invalid,
                         SecurityPolicy = SelectedSecurityPolicy
                     };
-                    _connectionConfigurations.AddOrUpdate(cfg);
+                    connectionConfigurations.AddOrUpdate(cfg);
                     return BlobCache.UserAccount.InsertObject(ConnectionString, cfg);
                 })
                 .Subscribe();
 
             BlobCache.UserAccount.GetAllObjects<ConnectionConfiguration>()
                 .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(x => _connectionConfigurations.AddOrUpdate(x));
+                .Subscribe(x => connectionConfigurations.AddOrUpdate(x));
 
 
             /*
