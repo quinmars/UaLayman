@@ -13,10 +13,17 @@
     <Grid>
         <wctc:DataGrid ItemsSource="{x:Bind ViewModel.Items}"
                        GridLinesVisibility="Horizontal"
-                       AutoGenerateColumns="False">
+                       AutoGenerateColumns="False"
+                       SelectionMode="Extended"
+                       >
             <wctc:DataGrid.Columns>
-                <wctc:DataGridTextColumn Header="Browse path" Binding="{Binding BrowsePath}" />
-                <wctc:DataGridTextColumn Header="Node Id" Binding="{Binding NodeId}" />
+                <wctc:DataGridTextColumn Header="Browse path"
+                                         Binding="{Binding BrowsePath}"
+                                         IsReadOnly="True" 
+                                         />
+                <wctc:DataGridTextColumn Header="Node Id"
+                                         Binding="{Binding NodeId}"
+                                         IsReadOnly="True" />
                 <wctc:DataGridTextColumn Header="Value" Binding="{Binding Value}" />
             </wctc:DataGrid.Columns>
         </wctc:DataGrid>
