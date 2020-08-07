@@ -42,7 +42,7 @@ namespace UaLayman.Views
             StateViewModel = new ConnectionStateViewModel(channelService);
 
             // The settings
-            var settingsViewModel = new SettingsViewModel(ViewModel, this);
+            var settingsViewModel = new SettingsViewModel(ViewModel, this, blobCache);
             Locator.CurrentMutable.RegisterLazySingleton(() => settingsViewModel, typeof(IRoutableViewModel), "Settings");
 
             Window.Current.SetTitleBar(AppTitleBar);

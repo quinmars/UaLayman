@@ -19,6 +19,8 @@ namespace UaLayman.ViewModels
 {
     public class SettingsViewModel : RoutableViewModelBase
     {
+        private const string _themeString = "Theme";
+
         public IEnumerable<string> AvailableThemes { get; } = new[]
         {
             "Light",
@@ -33,7 +35,7 @@ namespace UaLayman.ViewModels
             set => this.RaiseAndSetIfChanged(ref _selectedTheme, value);
         }
 
-        public SettingsViewModel(IScreen screen, IThemeService themeService) : base(screen, "Settings")
+        public SettingsViewModel(IScreen screen, IThemeService themeService, IBlobCache blobCache) : base(screen, "Settings")
         {
             SelectedTheme = AvailableThemes.Last();
 
@@ -52,6 +54,14 @@ namespace UaLayman.ViewModels
                 })
                 .DistinctUntilChanged()
                 .Subscribe(x => themeService.RequestTheme(x));
+
+            this.WhenAnyValue(x => x.SelectedTheme)
+                .Subscribe(s => blobCache.InsertObject(_themeString, s));
+
+            blobCache
+                .GetObject<string>(_themeString)
+                .ObserveOn(RxApp.MainThreadScheduler)
+                .Subscribe(s => SelectedTheme = s);
         }
     }
 }
