@@ -1,4 +1,5 @@
-﻿using ReactiveUI;
+﻿using Akavache;
+using ReactiveUI;
 using Splat;
 using System;
 using System.Collections.Generic;
@@ -37,9 +38,9 @@ namespace UaLayman.ViewModels
         private readonly ObservableAsPropertyHelper<string> _headerText;
         public string HeaderText => _headerText.Value;
 
-        public MainViewModel(IDiscoveryService discoveryService, IChannelService channelService)
+        public MainViewModel(IDiscoveryService discoveryService, IChannelService channelService, IBlobCache blobCache)
         {
-            var connectionViewModel = new ConnectionViewModel(this, channelService, discoveryService);
+            var connectionViewModel = new ConnectionViewModel(this, channelService, discoveryService, blobCache);
             var watchListViewModel = new WatchlistViewModel(this);
             var browseViewModel = new BrowseViewModel(this, channelService, watchListViewModel.Items);
 

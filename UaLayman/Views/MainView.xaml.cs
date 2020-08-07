@@ -1,4 +1,5 @@
-﻿using ReactiveUI;
+﻿using Akavache;
+using ReactiveUI;
 using Splat;
 using System;
 using System.Collections.Generic;
@@ -35,8 +36,9 @@ namespace UaLayman.Views
             
             var channelService = Locator.Current.GetService<IChannelService>();
             var discoveryService = Locator.Current.GetService<IDiscoveryService>();
+            var blobCache = BlobCache.UserAccount;
 
-            ViewModel = new MainViewModel(discoveryService, channelService);
+            ViewModel = new MainViewModel(discoveryService, channelService, blobCache);
             StateViewModel = new ConnectionStateViewModel(channelService);
 
             // The settings

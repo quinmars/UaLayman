@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using Akavache;
+using FluentAssertions;
 using NSubstitute;
 using ReactiveUI;
 using Splat;
@@ -77,7 +78,7 @@ namespace UaLayman.ViewModels.Tests
         [Fact]
         public void Create()
         {
-            var vm = new ConnectionViewModel(null, TestChannelService.Silent, TestDiscoveryService.Silent);
+            var vm = new ConnectionViewModel(null, TestChannelService.Silent, TestDiscoveryService.Silent, BlobCache.InMemory);
 
             vm.AvailableEndpoints
                 .Should().BeNullOrEmpty();
@@ -103,8 +104,9 @@ namespace UaLayman.ViewModels.Tests
         {
             var discovery = Substitute.For<IDiscoveryService>();
             discovery.GetEndpoints("url").Returns(Observable.Return(_testEndpoints1));
+            var blobCache = BlobCache.InMemory;
 
-            var vm = new ConnectionViewModel(null, TestChannelService.Silent, discovery);
+            var vm = new ConnectionViewModel(null, TestChannelService.Silent, discovery, blobCache);
 
             vm.ConnectionString = "url";
             vm.StartDiscover();
@@ -120,8 +122,9 @@ namespace UaLayman.ViewModels.Tests
 
             var discovery = Substitute.For<IDiscoveryService>();
             discovery.GetEndpoints("url").Returns(policies);
+            var blobCache = BlobCache.InMemory;
 
-            var vm = new ConnectionViewModel(null, TestChannelService.Silent, discovery);
+            var vm = new ConnectionViewModel(null, TestChannelService.Silent, discovery, blobCache);
 
             vm.ConnectionString = "url";
             vm.StartDiscover();
@@ -145,8 +148,9 @@ namespace UaLayman.ViewModels.Tests
             discovery.GetEndpoints("url1").Returns(Observable.Return(_testEndpoints1));
             discovery.GetEndpoints("badurl").Returns(Observable.Throw<EndpointDescription[]>(new ServiceResultException(StatusCodes.BadArgumentsMissing)));
             discovery.GetEndpoints("url2").Returns(Observable.Return(_testEndpoints2));
+            var blobCache = BlobCache.InMemory;
 
-            var vm = new ConnectionViewModel(null, TestChannelService.Silent, discovery);
+            var vm = new ConnectionViewModel(null, TestChannelService.Silent, discovery, blobCache);
 
             vm.ConnectionString = "url1";
             vm.StartDiscover();
@@ -176,8 +180,9 @@ namespace UaLayman.ViewModels.Tests
         {
             var discovery = Substitute.For<IDiscoveryService>();
             discovery.GetEndpoints("url").Returns(Observable.Return(_testEndpoints1));
+            var blobCache = BlobCache.InMemory;
 
-            var vm = new ConnectionViewModel(null, TestChannelService.Silent, discovery);
+            var vm = new ConnectionViewModel(null, TestChannelService.Silent, discovery, blobCache);
 
             vm.ConnectionString = "url";
             vm.StartDiscover();

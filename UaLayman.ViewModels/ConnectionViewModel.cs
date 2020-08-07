@@ -87,7 +87,7 @@ namespace UaLayman.ViewModels
         private readonly ISubject<Unit> _startDiscover;
         public void StartDiscover() => _startDiscover.OnNext(default);
 
-        public ConnectionViewModel(IScreen screen, IChannelService channelService, IDiscoveryService discoveryService)
+        public ConnectionViewModel(IScreen screen, IChannelService channelService, IDiscoveryService discoveryService, IBlobCache blobCache)
             : base(screen, "Connection")
         {
             var connectionConfigurations = new SourceCache<ConnectionConfiguration, string>(x => x.ConnectionString);
@@ -229,11 +229,11 @@ namespace UaLayman.ViewModels
                         SecurityPolicy = SelectedSecurityPolicy
                     };
                     connectionConfigurations.AddOrUpdate(cfg);
-                    return BlobCache.UserAccount.InsertObject(ConnectionString, cfg);
+                    return blobCache.InsertObject(ConnectionString, cfg);
                 })
                 .Subscribe();
 
-            BlobCache.UserAccount.GetAllObjects<ConnectionConfiguration>()
+            blobCache.GetAllObjects<ConnectionConfiguration>()
                 .ObserveOn(RxApp.MainThreadScheduler)
                 .Subscribe(x => connectionConfigurations.AddOrUpdate(x));
 
