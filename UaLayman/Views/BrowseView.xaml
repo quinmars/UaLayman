@@ -12,6 +12,26 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <UserControl.Resources>
         <cmn:ObjectToVisibilityConverter x:Key="HideWhenNull" />
+        <DataTemplate x:Key="ShortStringTemplate" x:DataType="vms:StringVariantViewModel">
+            <TextBlock Text="{x:Bind Value, Mode=OneWay}"
+                       Style="{StaticResource HeaderTextBlockStyle}"
+                       Foreground="{ThemeResource SystemAccentColor}"
+                       HorizontalAlignment="Stretch"
+                       HorizontalTextAlignment="Right"
+                       IsTextSelectionEnabled="True" />
+        </DataTemplate>
+        <DataTemplate x:Key="LongStringTemplate" x:DataType="vms:StringVariantViewModel">
+            <TextBlock Text="{x:Bind Value, Mode=OneWay}"
+                       Style="{StaticResource TitleTextBlockStyle}"
+                       Foreground="{ThemeResource SystemAccentColor}"
+                       HorizontalAlignment="Stretch"
+                       HorizontalTextAlignment="Left"
+                       IsTextSelectionEnabled="True" />
+        </DataTemplate>
+        <cmn:VariantSelector x:Key="VariantSelector"
+                             ShortStringTemplate="{StaticResource ShortStringTemplate}"
+                             LongStringTemplate="{StaticResource LongStringTemplate}" />
+
         <Style TargetType="TextBlock"
                BasedOn="{StaticResource CaptionTextBlockStyle}"
                x:Key="CaptionStyle">
@@ -51,12 +71,10 @@
         <DataTemplate x:Name="VariableTemplate"
                       x:DataType="vms:VariableNodeViewModel">
             <StackPanel Spacing="12" Margin="12" HorizontalAlignment="Stretch">
-                <TextBlock Text="{x:Bind Value, Mode=OneWay}"
-                           Style="{StaticResource HeaderTextBlockStyle}"
-                           MinHeight="64"
-                           Foreground="{ThemeResource SystemAccentColor}"
-                           HorizontalAlignment="Right"
-                           IsTextSelectionEnabled="True" />
+                <ContentControl ContentTemplateSelector="{StaticResource VariantSelector}"
+                                HorizontalAlignment="Right"
+                                Content="{Binding VariantViewModel}"
+                                MinHeight="64" />
                 <StackPanel>
                     <TextBlock Text="DataType" Style="{StaticResource CaptionStyle}"/>
                     <TextBlock Text="{x:Bind DataType, Mode=OneWay}" IsTextSelectionEnabled="True" />

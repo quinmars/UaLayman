@@ -21,11 +21,18 @@ namespace UaLayman.ViewModels
             AttributeIds.Historizing
         }).ToArray();
 
-        private string _value;
-        public string Value
+        private VariantViewModel _variantViewModel;
+        public VariantViewModel VariantViewModel
         {
-            get => _value;
-            private set => this.RaiseAndSetIfChanged(ref _value, value);
+            get => _variantViewModel;
+            private set => this.RaiseAndSetIfChanged(ref _variantViewModel, value);
+        }
+        
+        private Variant _variant;
+        public Variant Variant
+        {
+            get => _variant;
+            private set => this.RaiseAndSetIfChanged(ref _variant, value);
         }
 
         private NodeId _dataType;
@@ -75,7 +82,7 @@ namespace UaLayman.ViewModels
                     switch (att)
                     {
                         case AttributeIds.Value:
-                            Value = r.Item2.Variant.ToDisplayString();
+                            Variant = r.Item2.Variant;
                             break;
                         case AttributeIds.DataType:
                             DataType = val as NodeId;
@@ -99,7 +106,20 @@ namespace UaLayman.ViewModels
             Update.Execute(VariableAttributes).Subscribe();
 
             _nodeValueSubscription = channel.NodeValue(NodeId)
-                .Subscribe(val => Value = val.Variant.ToDisplayString());
+                .Subscribe(val => Variant = val.Variant);
+
+            this.WhenAnyValue(x => x.Variant)
+                .Subscribe(x =>
+                {
+                    if (VariantViewModel == null || x.Type != VariantViewModel.VariantType)
+                    {
+                        VariantViewModel = VariantViewModel.Create(x);
+                    }
+                    else
+                    {
+                        VariantViewModel.Variant = x;
+                    }
+                });
         }
 
         public override void Dispose()

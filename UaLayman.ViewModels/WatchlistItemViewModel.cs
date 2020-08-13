@@ -13,8 +13,8 @@ namespace UaLayman.ViewModels
         public NodeId NodeId { get; }
         public string BrowsePath { get; }
 
-        private string _value;
-        public string Value
+        private object _value;
+        public object Value
         {
             get => _value;
             private set => this.RaiseAndSetIfChanged(ref _value, value);
@@ -33,7 +33,7 @@ namespace UaLayman.ViewModels
             BrowsePath = browsePath;
 
             _nodeValueSubscription = channel.NodeValue(NodeId)
-                .Subscribe(val => Value = val.Variant.ToDisplayString());
+                .Subscribe(val => Value = val.Variant.ToString());
         }
 
         public void Dispose()
