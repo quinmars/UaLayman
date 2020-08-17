@@ -13,6 +13,7 @@ namespace UaLayman
     {
         public DataTemplate ShortStringTemplate { get; set; }
         public DataTemplate LongStringTemplate { get; set; }
+        public DataTemplate MonospacedLongStringTemplate { get; set; }
 
         protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
         {
@@ -21,6 +22,8 @@ namespace UaLayman
                 case StringVariantViewModel svm:
                     if (svm.IsDisplayString)
                         return ShortStringTemplate;
+                    else if (svm.IsMonospaced)
+                        return MonospacedLongStringTemplate;
                     else
                         return LongStringTemplate;
             }

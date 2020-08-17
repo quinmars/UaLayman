@@ -28,9 +28,19 @@
                        HorizontalTextAlignment="Left"
                        IsTextSelectionEnabled="True" />
         </DataTemplate>
+        <DataTemplate x:Key="MonospacedStringTemplate" x:DataType="vms:StringVariantViewModel">
+            <TextBlock Text="{x:Bind Value, Mode=OneWay}"
+                       Style="{StaticResource TitleTextBlockStyle}"
+                       Foreground="{ThemeResource SystemAccentColor}"
+                       FontFamily="Consolas"
+                       HorizontalAlignment="Stretch"
+                       HorizontalTextAlignment="Left"
+                       IsTextSelectionEnabled="True" />
+        </DataTemplate>
         <cmn:VariantSelector x:Key="VariantSelector"
                              ShortStringTemplate="{StaticResource ShortStringTemplate}"
-                             LongStringTemplate="{StaticResource LongStringTemplate}" />
+                             LongStringTemplate="{StaticResource LongStringTemplate}"
+                             MonospacedLongStringTemplate="{StaticResource MonospacedStringTemplate}"/>
 
         <Style TargetType="TextBlock"
                BasedOn="{StaticResource CaptionTextBlockStyle}"
@@ -72,7 +82,8 @@
                       x:DataType="vms:VariableNodeViewModel">
             <StackPanel Spacing="12" Margin="12" HorizontalAlignment="Stretch">
                 <ContentControl ContentTemplateSelector="{StaticResource VariantSelector}"
-                                HorizontalAlignment="Right"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Stretch"
                                 Content="{Binding VariantViewModel}"
                                 MinHeight="64" />
                 <StackPanel>

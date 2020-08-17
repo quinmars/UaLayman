@@ -1,6 +1,7 @@
 ﻿using ReactiveUI;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Text;
@@ -49,7 +50,6 @@ namespace UaLayman.ViewModels
                 case VariantType.UInt32:
                 case VariantType.Int64:
                 case VariantType.UInt64:
-                case VariantType.Guid:
                     return new StringVariantViewModel<object>(variant, v => v.ToString());
                 case VariantType.Float:
                     return new StringVariantViewModel<float>(variant, v => v.ToString("G5"));
@@ -59,11 +59,15 @@ namespace UaLayman.ViewModels
                     return new StringVariantViewModel<string>(variant, v => $"'{v}'", isDisplayString: false);
                 case VariantType.DateTime:
                     return new StringVariantViewModel<DateTime>(variant, v => $"{v:yyyy-dd-MM}\n{v:HH:mm:ss}");
+                case VariantType.Guid:
+                    return new StringVariantViewModel<Guid>(variant, v => v.ToString(), isDisplayString: false, isMonospaced: true);
                 case VariantType.ByteString:
+                    return new StringVariantViewModel<byte[]>(variant, ByteStringToString, isDisplayString: false, isMonospaced: true);
                 case VariantType.XmlElement:
                 case VariantType.NodeId:
                 case VariantType.ExpandedNodeId:
                 case VariantType.StatusCode:
+                    return new StringVariantViewModel<StatusCode>(variant, StatusCodeToString, isDisplayString: false);
                 case VariantType.QualifiedName:
                 case VariantType.LocalizedText:
                 case VariantType.ExtensionObject:
@@ -73,6 +77,16 @@ namespace UaLayman.ViewModels
                 default:
                     return new StringVariantViewModel<object>(variant, _ => "Unkwon");
             }
+        }
+
+        private static string StatusCodeToString(StatusCode code)
+        {
+            return $"{StatusCodes.GetDefaultMessage(code)} ({code})";
+        }
+
+        private static string ByteStringToString(byte[] v)
+        {
+            return $"[{v.Length:000}] {string.Join(" ", v.Select(b => b.ToString("X2")))}";
         }
     }
 

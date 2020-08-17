@@ -10,17 +10,19 @@ namespace UaLayman.ViewModels
     public class StringVariantViewModel : VariantViewModel<string>
     {
         public bool IsDisplayString { get; }
+        public bool IsMonospaced { get; }
 
-        public StringVariantViewModel(bool isDisplayString)
+        public StringVariantViewModel(bool isDisplayString, bool isMonospaced)
         {
             IsDisplayString = isDisplayString;
+            IsMonospaced = isMonospaced;
         }
     }
 
     public class StringVariantViewModel<T> : StringVariantViewModel
     {
-        public StringVariantViewModel(Variant variant, Func<T, string> selector, bool isDisplayString = true)
-            : base(isDisplayString)
+        public StringVariantViewModel(Variant variant, Func<T, string> selector, bool isDisplayString = true, bool isMonospaced = false)
+            : base(isDisplayString, isMonospaced)
         {
             Variant = variant;
 
