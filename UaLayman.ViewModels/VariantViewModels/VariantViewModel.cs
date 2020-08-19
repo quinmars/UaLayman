@@ -63,11 +63,11 @@ namespace UaLayman.ViewModels
                     return new StringVariantViewModel<Guid>(variant, v => v.ToString(), isDisplayString: false, isMonospaced: true);
                 case VariantType.ByteString:
                     return new StringVariantViewModel<byte[]>(variant, ByteStringToString, isDisplayString: false, isMonospaced: true);
+                case VariantType.StatusCode:
+                    return new StringVariantViewModel<StatusCode>(variant, StatusCodeToString, isDisplayString: false);
                 case VariantType.XmlElement:
                 case VariantType.NodeId:
                 case VariantType.ExpandedNodeId:
-                case VariantType.StatusCode:
-                    return new StringVariantViewModel<StatusCode>(variant, StatusCodeToString, isDisplayString: false);
                 case VariantType.QualifiedName:
                 case VariantType.LocalizedText:
                 case VariantType.ExtensionObject:
