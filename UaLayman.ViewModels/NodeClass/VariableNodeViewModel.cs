@@ -13,8 +13,8 @@ namespace UaLayman.ViewModels
 
         public static uint[] VariableAttributes { get; } = BaseAttributes.Concat(new[]
         {
-            AttributeIds.Value,
             AttributeIds.DataType,
+            AttributeIds.Value,
             AttributeIds.AccessLevel,
             AttributeIds.UserAccessLevel,
             AttributeIds.MinimumSamplingInterval,
@@ -40,6 +40,13 @@ namespace UaLayman.ViewModels
         {
             get => _dataType;
             private set => this.RaiseAndSetIfChanged(ref _dataType, value);
+        }
+
+        private string _dataTypeName;
+        public string DataTypeName
+        {
+            get => _dataTypeName;
+            private set => this.RaiseAndSetIfChanged(ref _dataTypeName, value);
         }
 
         private byte? _accessLevel;
@@ -86,6 +93,7 @@ namespace UaLayman.ViewModels
                             break;
                         case AttributeIds.DataType:
                             DataType = val as NodeId;
+                            DataTypeName = NodeIds.GetName(DataType);
                             break;
                         case AttributeIds.AccessLevel:
                             AccessLevel = val as byte?;

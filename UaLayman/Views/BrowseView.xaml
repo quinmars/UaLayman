@@ -88,6 +88,10 @@
                                 MinHeight="64" />
                 <StackPanel>
                     <TextBlock Text="DataType" Style="{StaticResource CaptionStyle}"/>
+                    <TextBlock Text="{x:Bind DataTypeName, Mode=OneWay}"
+                               Visibility="{x:Bind DataTypeName, Converter={StaticResource HideWhenNull}, Mode=OneWay}"
+                               IsTextSelectionEnabled="True"
+                               />
                     <TextBlock Text="{x:Bind DataType, Mode=OneWay}" IsTextSelectionEnabled="True" />
                 </StackPanel>
                 <StackPanel>
