@@ -6,7 +6,34 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="NodeIds.generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>NodeIds.tt</DependentUpon>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Workstation.UaClient" Version="2.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="NodeIds.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>NodeIds.generated.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="NodeIds.generated.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>NodeIds.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
 
 </Project>
